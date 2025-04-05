@@ -1,0 +1,95 @@
+body {
+   display: flex;
+   flex-direction: column;
+   margin: 0;
+   padding: 0;
+   font-family: Calibri, Arial, 'Trebuchet MS', sans-serif;
+   font-size: 14px;
+}
+
+/* CABEÇALHO */
+.header-container{
+   text-align: center;
+   background-color: rgb(253, 252, 252);
+   padding: 1.5rem;
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   position: sticky;
+   top: 0;
+   z-index: 50;
+}
+
+.header-container a{
+   text-decoration: none;
+   color: rgb(96, 96, 233);
+}
+
+/* NAV E SECTION */
+.main-container {
+   height: 100vh;
+   display: flex;
+}
+
+/* NAV */
+.nav-container{
+   width: 35vh;
+   background-color: blue;
+}
+
+.menu-container{
+   height: 25vh;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   background-color: rgb(150, 70, 179);
+   position: sticky;
+   top: calc(3rem + 16px);
+   z-index: 100;
+}
+
+.project-container{
+   height: 75vh;
+   display: flex;
+   justify-content: center;
+   align-items: end;
+   background-color: rgb(117, 163, 163);
+}
+
+.project-container p{
+   margin-bottom: 30px;
+}
+
+/* SECTION */
+.section-container{
+   flex: 1;
+   overflow-y: auto;
+   background-color: rgb(0, 255, 98);
+}
+
+.dash-container{
+   margin: 20px 15px 0 15px;
+   height: 30vh;
+   background-color: rgb(26, 105, 105);
+}
+
+.filter-container{
+   margin: 10px 15px 0 15px;
+   height: 10vh;
+   background-color: rgb(105, 71, 26);
+}
+
+.info-container{
+   margin: 10px 15px 20px 15px;
+   background-color: rgb(105, 71, 26);
+   min-height: 60vh;
+}
+
+/* RODAPÉ */
+footer {
+   text-align: center;
+   background-color: rgb(245, 243, 243);
+   padding: 1rem;
+   margin-top: auto;
+   box-shadow: 0 0 6px 4px rgba(0, 0, 0, 0.1);
+}
+
