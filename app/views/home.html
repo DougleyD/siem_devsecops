@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="/static/home.css">
+{% endblock %}
+
+{% block content %}
+<div class="header-container">
+   <a href="{{ url_for('main.root') }}">Sair</a>
+</div>
+
+<div class="main-container">
+   <div class="nav-container">
+      <div class="menu-container">
+      </div>
+      <div class=project-container>
+        <p>DevSecOps - PUCPR</p>
+      </div>
+   </div>
+   <div class="section-container">
+      <div class="dash-container">
+
+      </div>
+      <div class="filter-container">
+         
+      </div>
+      <div class="info-container">
+         
+      </div>
+   </div>
+</div>
+
+<footer>
+   <p>Developed by Daniel Mendes and Dougley Doll - © 2025.</p>
+</footer>
+{% endblock %}
+
