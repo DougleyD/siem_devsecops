@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('auth.register') }}">Cadastre-se</a>
+{% endblock %}

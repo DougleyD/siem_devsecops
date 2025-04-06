@@ -1,19 +1,11 @@
-from flask import Blueprint, render_template, redirect
+from flask import Blueprint, redirect, render_template, url_for
 
-app = Blueprint('main', __name__)
+main_bp = Blueprint('main', __name__)
 
-@app.route('/', methods=['GET'])
+@main_bp.route('/')
 def root():
-    return redirect('/login')
+   return redirect(url_for('auth.login'))
 
-@app.route('/login', methods=['GET'])
-def login():
-    return render_template('login.html', title='Login')
-
-@app.route('/register', methods=['GET'])
-def register():
-    return render_template('register.html', title='Register')
-
-@app.route('/home', methods=['GET'])
-def home():
-    return render_template('home.html', title='Home')
+@main_bp.route('/dashboard', methods=['GET'])
+def dashboard():
+   return render_template('dashboard.html', title='Dashboard')
