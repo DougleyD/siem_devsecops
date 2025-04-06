@@ -43,7 +43,7 @@ body {
    align-items: center;
    background-color: rgb(150, 70, 179);
    position: sticky;
-   top: calc(3rem + 16px);
+   top: calc(3rem + 17px);
    z-index: 100;
 }
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registro</title>
+</head>
+<body>
+    <h1>Registro</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    <form method="POST" action="{{ url_for('auth.register') }}">
+        <div>
+            <label>Usuário:</label>
+            <input type="text" name="username" required>
+        </div>
+        <div>
+            <label>Email:</label>
+            <input type="email" name="email" required>
+        </div>
+        <div>
+            <label>Senha:</label>
+            <input type="password" name="password" required>
+        </div>
+        <button type="submit">Registrar</button>
+    </form>
+    
+    <p>Já tem conta? <a href="/">Voltar</a></p>
+</body>
+</html>
