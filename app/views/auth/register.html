@@ -1,34 +1,19 @@
 {% extends "auth/layout.html" %}
 
-{% block style %}
-<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
-{% endblock %}
-
 {% block content %}
     <div class="form-register">
-        <div class="title-content">
-            <p>SIEM</p>
-        </div>
-        <div class="redirect-content">
-            <p>Já possui conta? <a href="{{ url_for('auth.login')}}">Entrar</a></p>
-        </div>
-        <div class="input-content">
-            <form method="POST" action="{{ url_for('auth.register')}}">
-                <input type="text" name="username" id="username" placeholder="Nome completo" required/>
-                <input type="email" name="email" id="email" placeholder="E-mail" required/>
-                <input type="password" name="password1" id="password1" placeholder="Senha" required/>
-                <input type="password" name="password2" id="password2" placeholder="Confirmar senha" required/>
-                <button type="submit">CADASTRAR</button>
+{% endblock %}
 
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <span class="alert-content {{ category }}">{{ message }}</span>
-                    {% endfor %}
-                {% endif %}
-                {% endwith %}
+{% block redirect %}
+    <p>Já possui conta? <a href="{{ url_for('auth.login')}}">Entrar</a></p>
+{% endblock %}
 
-            </form>
-        </div>
-    </div>
+{% block form %}
+    <div class="input-content">
+        <form method="POST" action="{{ url_for('auth.register')}}">
+            <input type="text" name="username" id="username" placeholder="Nome completo" required/>
+            <input type="email" name="email" id="email" placeholder="E-mail" required/>
+            <input type="password" name="password1" id="password1" placeholder="Senha" required/>
+            <input type="password" name="password2" id="password2" placeholder="Confirmar senha" required/>
+            <button type="submit">CADASTRAR</button>
 {% endblock %}
