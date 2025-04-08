@@ -1,7 +1,20 @@
-# .gitignore
+# Arquivos
 __pycache__/
 *.py[cod]
+.env
+siem.sql
+
+# Ambiente virtual
+env/
 venv/
 devsec/
+.env/
 .venv/
 .devsec/
+
+# Diretórios
+django/
+
+# Banco de dados
+migrations/
+!migrations/versions/
