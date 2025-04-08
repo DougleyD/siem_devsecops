@@ -1,9 +1,17 @@
 {% extends "auth/layout.html" %}
 
-{% block style %}
-<link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+{% block content %}
+    <div class="form-login">
 {% endblock %}
 
-{% block content %}
-<a href="{{ url_for('auth.register') }}">Cadastre-se</a>
+{% block redirect %}
+    <p>Ainda não possui conta? <a href="{{ url_for('auth.register')}}">Cadastre-se</a></p>
+{% endblock %}
+
+{% block form %}
+   <div class="input-content">
+      <form method="POST" action="{{ url_for('auth.login')}}">
+         <input type="email" name="email" id="email" placeholder="E-mail" required/>
+         <input type="password" name="password" id="password" placeholder="Senha" required/>
+         <button type="submit">ENTRAR</button>
 {% endblock %}
