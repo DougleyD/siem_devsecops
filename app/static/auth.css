@@ -13,7 +13,7 @@ body {
 
 .form-register{
    width: 470px;
-   height: 520px;
+   height: 560px;
    background-color: #ffffff;
    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
    border-radius: 5px;
@@ -49,6 +49,7 @@ body {
    justify-content: center;
    align-items: baseline;
    font-size: 14px;
+   margin-top: 10px;
 }
 
 .redirect-content a{
@@ -58,7 +59,7 @@ body {
 
 .input-content{
    width: 100%;
-   height: calc(100% - (40px + 120px + 30px));
+   height: calc(100% - (40px + 120px + 40px));
 }
 
 .input-content form{
@@ -70,41 +71,96 @@ body {
    align-items: center;
 }
 
-.input-content input{
+.input-data{
    width: 70%;
    height: 35px;
+   margin-bottom: 15px;
+   display: flex;
+}
+
+.input-data i, .input-code i{
+   background-color: #313131;
+   height: 39px;
+   width: 40px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   border-radius: 5px 0 0 5px;
+   color: white;
+   font-size: 12px;
+}
+
+.input-data input{
+   width: calc(100% - 40px);
+   height: 35px;
    padding-left: 10px;
-   margin-bottom: 10px;
-   border-radius: 5px;
+   border-radius: 0 5px 5px 0;
    border: 1px solid rgb(199, 201, 202);
    transition: border-color 0.5s ease;
 }
 
-.input-content input:focus{
+.input-data input:focus{
    outline: none;
    border-color: #4a90e2;
 }
 
-.input-content button{
+.input-code{
+   width: 70%;
+   height: 35px;
+   display: flex;
+   align-items: baseline;
+}
+
+.input-code input{
+   width: 40%;
+   height: 35px;
+   padding-left: 10px;
+   border-radius: 0 5px 5px 0;
+   border: 1px solid rgb(199, 201, 202);
+   transition: border-color 0.5s ease;
+}
+
+.input-code input:focus{
+   outline: none;
+   border-color: #4a90e2;
+}
+
+.input-code button{
    font-size: 12px;
    font-weight: bold;
-   margin-top: 10px;
+   width: 40%;
+   height: 35px;
+   margin-left: 20px;
+   background-color: #4f647a;
+   border: none;
+   color: white;
+   border-radius: 3px;
+}
+
+.input-code button:hover{
+   cursor: pointer;
+   background-color: #2f445e;
+}
+
+.button-data{
+   font-size: 12px;
+   font-weight: bold;
+   margin-top: 25px;
    width: 70%;
-   height: 30px;
+   height: 32px;
    background-color: #4a90e2;
    border: none;
    color: white;
    border-radius: 3px;
 }
 
-.input-content button:hover{
+.button-data:hover{
    cursor: pointer;
    background-color: #3b72b1;
-
 }
 
 .alert-content{
-   margin-top: 20px;
+   margin-top: 15px;
 }
 
 .alert-content.error {

@@ -11,9 +11,26 @@
 {% block form %}
     <div class="input-content">
         <form method="POST" action="{{ url_for('auth.register')}}">
-            <input type="text" name="username" id="username" placeholder="Nome completo" required/>
-            <input type="email" name="email" id="email" placeholder="E-mail" required/>
-            <input type="password" name="password1" id="password1" placeholder="Senha" required/>
-            <input type="password" name="password2" id="password2" placeholder="Confirmar senha" required/>
-            <button type="submit">CADASTRAR</button>
+            <div class="input-data">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" name="username" id="username" placeholder="Nome completo" value="{{ request.form.username if request.form else '' }}" required/>
+            </div>
+            <div class="input-data">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="text" name="email" id="email" placeholder="E-mail" value="{{ request.form.email if request.form else '' }}" required/>
+            </div>
+            <div class="input-data">
+                <i class="fa-solid fa-key"></i>
+                <input type="password" name="password1" id="password1" placeholder="Senha" value="{{ request.form.password1 if request.form else '' }}" required/>
+            </div>
+            <div class="input-data">
+                <i class="fa-solid fa-key"></i>
+                <input type="password" name="password2" id="password2" placeholder="Confirmar senha" value="{{ request.form.password2 if request.form else '' }}" required/>
+            </div>
+            <div class="input-code">
+                <i class="fa-solid fa-check"></i>
+                <input type="text" name="code" id="code" placeholder="# Código"/>
+                <button type="submit" name="send_code" value="true">ENVIAR CÓDIGO</button>
+            </div>
+            <button class="button-data" type="submit" name="register">CADASTRAR</button>
 {% endblock %}
