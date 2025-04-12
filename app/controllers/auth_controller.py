@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
+from datetime import datetime
+from app.services.email_service import EmailService
 from app.models.users import User
 from app import db
 import re
@@ -7,37 +9,66 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
+
     if request.method == 'POST':
+        # Se for pedido de envio de código
+        if 'send_code' in request.form:
+            email = request.form.get('email')
+            
+            if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
+                flash('Por favor, insira um email válido', 'error')
+                return render_template('auth/register.html', title='EventTrace | Register')
+            
+            # Gera e armazena o código
+            code = EmailService.generate_verification_code()
+            session['verification_data'] = {
+                'code': code,
+                'email': email,
+                'expires_at': EmailService.get_code_expiration()
+            }
+            
+            # Envia o e-mail
+            if EmailService.send_verification_email(email, code):
+                flash('Código de verificação enviado para seu e-mail', 'success')
+            else:
+                flash('Erro ao enviar código. Tente novamente.', 'error')
+            
+            return render_template('auth/register.html', title='EventTrace | Register')
+        
+        # Processa registro completo
         username = request.form.get('username')
         email = request.form.get('email')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
-
-        # Validações básicas de preenchimento
-        if not all([username, email, password1, password2]):
-            flash('Todos os campos são obrigatórios', 'error')
-            return render_template('auth/register.html', title='EventTrace | Register')
-
-        # Validação do nome (mínimo 5 caracteres, apenas letras e espaços)
+        user_code = request.form.get('code')
+        
+        #1. Validação do nome (mínimo 5 caracteres, apenas letras e espaços)
         if not re.match(r'^[a-zA-ZÀ-ÿ\s]{5,}$', username):
             flash('Nome deve ter pelo menos 5 caracteres e apenas letras', 'error')
             return render_template('auth/register.html', title='EventTrace | Register')
 
-        # Validação de email
-        if not re.match(r'^[^\s@]+@[^\s@]+\.[^\s@]+$', email):
-            flash('Por favor, insira um email válido', 'error')
-            return render_template('auth/register.html', title='EventTrace | Register')
-
-        # Validação de senha (mínimo 8 caracteres, pelo menos 1 letra, 1 número e 1 caracter especial)
+        #2. Validação de senha (mínimo 8 caracteres, pelo menos 1 letra, 1 número e 1 caracter especial)
         if not re.match(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*]{8,}$', password1):
             flash('Senha deve ter pelo menos 8 caracteres, com letras, números e símbolos (!@#$%^&*)', 'error')
             return render_template('auth/register.html', title='EventTrace | Register')
 
-        # Confirmação de senha
+        #3. Confirmação de senha
         if password1 != password2:
             flash('As senhas não coincidem', 'error')
             return render_template('auth/register.html', title='EventTrace | Register')
+        
+        #4. Verifica o código
+        verification_data = session.get('verification_data')
 
+        if not verification_data or user_code != verification_data['code'] or email != verification_data['email']:
+            flash('Código inválido ou e-mail não corresponde', 'error')
+            return render_template('auth/register.html', title='EventTrace | Register')
+        
+        if datetime.now().timestamp() > verification_data['expires_at']:
+            flash('Código expirado. Solicite um novo.', 'error')
+            return render_template('auth/register.html', title='EventTrace | Register')
+
+        
         # Verifica se email já existe
         if User.query.filter_by(email=email).first():
             flash('Email já cadastrado', 'error')
@@ -51,9 +82,14 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             
-            flash('Registro realizado com sucesso!', 'success')
-            return render_template('auth/register.html', title='EventTrace | Register')
-            
+            # Limpa a session após registro bem-sucedido
+            session.pop('verification_data', None)
+
+            flash('Registro realizado com sucesso! Você será redirecionado em 4 segundos...', 'success')
+            return render_template('auth/register.html', title='EventTrace | Register',
+                    url=url_for('auth.login'),
+                    delay=4)
+        
         except Exception as e:
             db.session.rollback()
             flash('Erro ao registrar usuário', 'error')
