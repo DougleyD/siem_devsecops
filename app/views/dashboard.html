@@ -5,26 +5,33 @@
 {% endblock %}
 
 {% block content %}
-<div class="header-container">
-   <a href="{{ url_for('main.root') }}">Sair</a>
+<div class="header-content">
+   <div class="header-logo"><p>DEVSECOPS</p></div>
+   <div class="header-menu">
+      <p>Welcome, user!</p>
+      <p><a href="{{ url_for('main.root') }}">Logout</a></p>
+   </div>
 </div>
 
-<div class="main-container">
-   <div class="nav-container">
-      <div class="menu-container">
+<div class="main-content">
+   <div class="nav-content">
+      <div class="menu-content">
+         <p>1-MENU</p>
+         <p>2-MENU</p>
+         <p>3-MENU</p>
       </div>
-      <div class=project-container>
+      <div class=project-content>
         <p>DevSecOps - PUCPR</p>
       </div>
    </div>
-   <div class="section-container">
-      <div class="dash-container">
+   <div class="section-content">
+      <div class="dash-content">
 
       </div>
-      <div class="filter-container">
+      <div class="filter-content">
          
       </div>
-      <div class="info-container">
+      <div class="info-content">
          
       </div>
    </div>
