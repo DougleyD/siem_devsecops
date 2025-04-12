@@ -12,9 +12,6 @@ devsec/
 .venv/
 .devsec/
 
-# Diretórios
-django/
-
 # Banco de dados
 migrations/
 !migrations/versions/
