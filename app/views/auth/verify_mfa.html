@@ -1,0 +1,23 @@
+{% extends "auth/base.html" %}
+
+{% block content %}
+    <div class="form-verify-mfa">
+{% endblock %}
+
+{% block description %}
+    <div class="info-content">
+        <strong><p>Autenticação em Duas Etapas</p></strong>
+        <p>Informe o código de seu aplicativo autenticador:</p>    
+    </div>
+{% endblock %}
+
+{% block form %}
+   <div class="input-content">
+        <form method="POST" action="{{ url_for('auth.verify_mfa')}}">
+            <div class="input-data">
+                <i class="fa-solid fa-shield-halved"></i>
+                <input type="text" name="code" id="code" placeholder="# Código" required/>
+            </div>
+            <button class="button-data-mfa" type="submit">VERIFICAR</button>
+{% endblock %}
+

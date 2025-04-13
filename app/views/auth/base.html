@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     {% if delay and url %}
-    <meta http-equiv="refresh" content="{{ delay }};url={{ url }}">
+        <meta http-equiv="refresh" content="{{ delay }};url={{ url }}">
     {% endif %}
     <title>{{ title }}</title>
 </head>
 <body>
     {% block content %}{% endblock %}
-        <div class="title-content">
-            <img src="{{ url_for('static', filename='logo.png')}}"/>
+        <div class="logo-content">
+            <img src="{{ url_for('static', filename='img/logo.png')}}"/>
         </div>
-        <div class="redirect-content">
-            {% block redirect %}{% endblock %}
-        </div>
-        {% block form %}{% endblock %}
+        {% block description %}{% endblock %}
+            {% block qr_code %}{% endblock %}
+            {% block form %}{% endblock %}
                 {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}

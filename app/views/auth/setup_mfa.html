@@ -1,0 +1,31 @@
+{% extends "auth/base.html" %}
+
+{% block content %}
+    <div class="form-setup-mfa">
+{% endblock %}
+
+{% block description %}
+    <div class="info-content">
+        <strong><p>Configurar Autenticação em Duas Etapas</p></strong>
+        <p>Escaneie o QR Code com seu aplicativo autenticador:</p>    
+    </div>
+{% endblock %}
+
+{% block form %}
+   <div class="input-content-mfa">
+        <div class="qr-code-content">
+            <div class="qr-code-img">
+                <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+            </div>
+            <div class="qr-code-button">
+                <button type="submit"><i class="fa-solid fa-rotate"></i></button>
+            </div>
+        </div>
+        <form method="POST" action="{{ url_for('auth.setup_mfa')}}">
+            <div class="input-data">
+                <i class="fa-solid fa-shield-halved"></i>
+                <input type="text" name="code" id="code" placeholder="# Código" required/>
+            </div>
+            <button class="button-data-mfa" type="submit">VERIFICAR</button>
+{% endblock %}
+
