@@ -20,8 +20,8 @@ body {
 }
 
 .form-login{
-   width: 400px;
-   height: 420px;
+   width: 420px;
+   height: 410px;
    background-color: #ffffff;
    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
    border-radius: 5px;
@@ -142,10 +142,17 @@ body {
    background-color: #2f445e;
 }
 
-.button-data{
+.button-data-register{
+   margin-top: 25px;
+}
+
+.button-data-login{
+   margin-top: 10px;
+}
+
+.button-data-register, .button-data-login{
    font-size: 12px;
    font-weight: bold;
-   margin-top: 25px;
    width: 70%;
    height: 32px;
    background-color: #4a90e2;
@@ -154,7 +161,7 @@ body {
    border-radius: 3px;
 }
 
-.button-data:hover{
+.button-data-register:hover, .button-data-login:hover{
    cursor: pointer;
    background-color: #3b72b1;
 }
@@ -166,13 +173,11 @@ body {
 .alert-content.error {
    background-color: #f5d1d7;
    color: #c62828;
-   border: 1px solid #ef9a9a;
-   padding: 3px;
+   padding: 3px 5px;
 }
 
 .alert-content.success {
    background-color: #d1f5df;
    color: #2e7d32;
-   border: 1px solid #a5d6a7;
-   padding: 3px;
+   padding: 3px 5px;
 }
