@@ -114,3 +114,11 @@ def login():
         return render_template('auth/login.html', title='EventTrace | Login')
         
     return render_template('auth/login.html', title='EventTrace | Login')
+
+@auth_bp.route('/setup_mfa', methods=['GET', 'POST'])
+def setup_mfa():
+    return render_template('auth/setup_mfa.html', title='EventTrace | Setup MFA')
+
+@auth_bp.route('/verify_mfa', methods=['GET', 'POST'])
+def verify_mfa():
+    return render_template('auth/verify_mfa.html', title='EventTrace | Verify MFA')
