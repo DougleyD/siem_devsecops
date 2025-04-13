@@ -3,6 +3,7 @@ from datetime import datetime
 from app.services.email_service import EmailService
 from app.models.users import User
 from app import db
+from werkzeug.security import check_password_hash
 import re
 
 auth_bp = Blueprint('auth', __name__)
@@ -99,4 +100,17 @@ def register():
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        user = User.query.filter_by(email=email).first()
+        
+        # Verifica credenciais básicas
+        if not user or not check_password_hash(user.password_hash, password):
+            flash('E-mail ou senha incorretos', 'error')
+            return render_template('auth/login.html', title='EventTrace | Login')
+        
+        flash('Autenticação bem sucedida', 'success')
+        return render_template('auth/login.html', title='EventTrace | Login')
+        
     return render_template('auth/login.html', title='EventTrace | Login')
