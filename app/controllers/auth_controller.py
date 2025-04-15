@@ -98,6 +98,12 @@ def register():
 
     return render_template('auth/register.html', title='EventTrace | Register')
 
+# controllers/auth_controller.py
+from flask import session, redirect, url_for
+from werkzeug.security import check_password_hash
+from app.services.mfa_service import MFAService
+from datetime import datetime
+
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -105,20 +111,78 @@ def login():
         password = request.form.get('password')
         user = User.query.filter_by(email=email).first()
         
-        # Verifica credenciais básicas
         if not user or not check_password_hash(user.password_hash, password):
             flash('E-mail ou senha incorretos', 'error')
             return render_template('auth/login.html', title='EventTrace | Login')
         
-        flash('Autenticação bem sucedida', 'success')
-        return render_template('auth/login.html', title='EventTrace | Login')
+        session['user_id'] = user.id
+        
+        if not user.tfa_enabled:
+            return redirect(url_for('auth.setup_mfa'))
+        
+        return redirect(url_for('auth.verify_mfa'))
         
     return render_template('auth/login.html', title='EventTrace | Login')
 
 @auth_bp.route('/setup_mfa', methods=['GET', 'POST'])
 def setup_mfa():
-    return render_template('auth/setup_mfa.html', title='EventTrace | Setup MFA')
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
+    
+    user = User.query.get(session['user_id'])
+    
+    if request.method == 'POST':
+        code = request.form.get('code')
+        
+        if MFAService.verify_code(user.tfa_secret, code):
+            user.tfa_enabled = True
+            db.session.commit()
+            flash('MFA configurado com sucesso!', 'success')
+            return render_template('auth/login.html', title='EventTrace | Login')
+            
+        flash('Código inválido', 'error')
+    
+    # Verifica se precisa gerar um código inicial (apenas se não existir)
+    if not user.tfa_secret:
+        user.tfa_secret = MFAService.generate_secret()
+        user.tfa_expiration = MFAService.get_expiration_date()
+        db.session.commit()
+    
+    qr_code = MFAService.generate_qr_code(user.tfa_secret, user.email)
+    return render_template('auth/setup_mfa.html', 
+                         title='EventTrace | Setup MFA', 
+                         qr_code=qr_code)
 
 @auth_bp.route('/verify_mfa', methods=['GET', 'POST'])
 def verify_mfa():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
+    
+    user = User.query.get(session['user_id'])
+    
+    if request.method == 'POST':
+        code = request.form.get('code')
+        
+        if MFAService.verify_code(user.tfa_secret, code):
+            session['authenticated'] = True
+            return redirect(url_for('main.dashboard'))  # Ajuste para sua rota principal
+            
+        flash('Código inválido', 'error')
+    
     return render_template('auth/verify_mfa.html', title='EventTrace | Verify MFA')
+
+# controllers/auth_controller.py
+@auth_bp.route('/refresh_mfa', methods=['POST'])
+def refresh_mfa():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.login'))
+    
+    user = User.query.get(session['user_id'])
+    
+    # Gera novo segredo e atualiza a expiração
+    user.tfa_secret = MFAService.generate_secret()
+    user.tfa_expiration = MFAService.get_expiration_date()
+    db.session.commit()
+    
+    flash('Novo código MFA gerado com sucesso', 'success')
+    return redirect(url_for('auth.setup_mfa'))

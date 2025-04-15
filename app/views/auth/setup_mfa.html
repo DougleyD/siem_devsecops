@@ -17,11 +17,13 @@
             <div class="qr-code-img">
                 <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
             </div>
-            <div class="qr-code-button">
-                <button type="submit"><i class="fa-solid fa-rotate"></i></button>
+            <div class="qr-code-form">
+                <form method="POST" action="{{ url_for('auth.refresh_mfa') }}">
+                    <button class="qr-code-button" type="submit"><i class="fa-solid fa-rotate"></i></button>
+                </form>
             </div>
         </div>
-        <form method="POST" action="{{ url_for('auth.setup_mfa')}}">
+        <form class="input-data-form-mfa" method="POST" action="{{ url_for('auth.setup_mfa')}}">
             <div class="input-data">
                 <i class="fa-solid fa-shield-halved"></i>
                 <input type="text" name="code" id="code" placeholder="# Código" required/>

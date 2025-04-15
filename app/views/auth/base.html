@@ -6,10 +6,10 @@
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>{{ title }}</title>
     {% if delay and url %}
         <meta http-equiv="refresh" content="{{ delay }};url={{ url }}">
     {% endif %}
-    <title>{{ title }}</title>
 </head>
 <body>
     {% block content %}{% endblock %}
@@ -17,15 +17,15 @@
             <img src="{{ url_for('static', filename='img/logo.png')}}"/>
         </div>
         {% block description %}{% endblock %}
-            {% block qr_code %}{% endblock %}
-            {% block form %}{% endblock %}
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <span class="alert-content {{ category }}">{{ message }}</span>
-                    {% endfor %}
-                {% endif %}
-                {% endwith %}
+        {% block qr_code %}{% endblock %}
+        {% block form %}{% endblock %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <span class="alert-content {{ category }}">{{ message }}</span>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
             </form>
         </div>
     </div>
