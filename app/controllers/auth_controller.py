@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, current_app
-from datetime import datetime
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from app.services.email_service import EmailService
+from app.services.mfa_service import MFAService
+from werkzeug.security import check_password_hash
+from datetime import datetime
 from app.models.users import User
 from app import db
-from werkzeug.security import check_password_hash
 import re
+
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -98,12 +100,6 @@ def register():
 
     return render_template('auth/register.html', title='EventTrace | Register')
 
-# controllers/auth_controller.py
-from flask import session, redirect, url_for
-from werkzeug.security import check_password_hash
-from app.services.mfa_service import MFAService
-from datetime import datetime
-
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -171,7 +167,7 @@ def verify_mfa():
     
     return render_template('auth/verify_mfa.html', title='EventTrace | Verify MFA')
 
-# controllers/auth_controller.py
+
 @auth_bp.route('/refresh_mfa', methods=['POST'])
 def refresh_mfa():
     if 'user_id' not in session:
