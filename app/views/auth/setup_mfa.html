@@ -1,33 +1,41 @@
 {% extends "auth/base.html" %}
 
-{% block content %}
-    <div class="form-setup-mfa">
-{% endblock %}
+{% block form_type %}form-setup-tfa{% endblock %}
 
 {% block description %}
-    <div class="info-content">
-        <strong><p>Configurar Autenticação em Duas Etapas</p></strong>
-        <p>Escaneie o QR Code com seu aplicativo autenticador:</p>    
-    </div>
+<div class="info-tfa">
+    <strong><p>Configurar Autenticação em Duas Etapas</p></strong>
+    <p>Escaneie o QR Code com seu aplicativo autenticador:</p>    
+</div>
 {% endblock %}
 
 {% block form %}
-   <div class="input-content-mfa">
-        <div class="qr-code-content">
-            <div class="qr-code-img">
-                <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
-            </div>
-            <div class="qr-code-form">
-                <form method="POST" action="{{ url_for('auth.refresh_mfa') }}">
-                    <button class="qr-code-button" type="submit"><i class="fa-solid fa-rotate"></i></button>
-                </form>
-            </div>
+<div class="form-tfa">
+    <div class="qr-code">
+        <div class="qr-code-img">
+            <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
         </div>
-        <form class="input-data-form-mfa" method="POST" action="{{ url_for('auth.setup_mfa')}}">
-            <div class="input-data">
-                <i class="fa-solid fa-shield-halved"></i>
-                <input type="text" name="code" id="code" placeholder="# Código" required/>
-            </div>
-            <button class="button-data-mfa" type="submit">VERIFICAR</button>
-{% endblock %}
+        <div class="qr-code-refresh">
+            <form method="POST" action="{{ url_for('auth.refresh_mfa') }}">
+                <button class="qr-code-bttn" type="submit"><i class="fa-solid fa-rotate"></i></button>
+            </form>
+        </div>
+    </div>
+    <form class="input-tfa" method="POST" action="{{ url_for('auth.setup_mfa')}}">
+        <div class="input-field-data">
+            <i class="fa-solid fa-shield-halved"></i>
+            <input type="text" name="code" id="code" placeholder="# Código" required/>
+        </div>
 
+        <button class="bttn-tfa-data" type="submit">VERIFICAR</button>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <span class="alert-message {{ category }}">{{ message }}</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </form>
+</div>
+{% endblock %}
