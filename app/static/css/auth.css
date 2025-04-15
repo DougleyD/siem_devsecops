@@ -32,7 +32,7 @@ body {
 /* PÁGINA DE SETUP MFA */
 .form-setup-mfa{
    width: 420px;
-   height: 510px;
+   height: 540px;
    background-color: #ffffff;
    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
    border-radius: 5px;
@@ -103,7 +103,7 @@ body {
 /* QR-CODE */
 .qr-code-content{
    width: 100%;
-   height: 160px;
+   height: 180px;
    display: flex;
    justify-content: center;
 }
@@ -113,42 +113,51 @@ body {
    height: 100%;
    display: flex;
    justify-content: center;
-   align-items: baseline;
-   margin-left: 30px;
-   margin-top: 20px;
+   align-items: end;
+   margin-left: 40px;
 }
 
-.qr-code-button{
+.qr-code-img img{
+   width: 160px;
+   height: 160px;
+}
+
+.qr-code-form{
+   width: 41px;
    height: 100%;
-   display: flex;
-   justify-content: center;
 }
-
-.qr-code-button button{
-   width: 30px;
-   height: 25px;
+.qr-code-form form{
+   width: 100%;
+   height: 100%;
+}
+.qr-code-button{
+   padding: 10px 14px;
    margin-top: 30px;
-   background-color: #4a90e2;
+   background-color: #4f647a;
    border: none;
    color: white;
    border-radius: 3px;
    transition: 0.4s;
 }
 
-.qr-code-button button:hover{
+.qr-code-button:hover{
    cursor: pointer;
-   background-color: #3b72b1;
+   background-color: #2f445e;
 }
 
-.input-content-mfa form{
+.input-content-mfa{
    width: 100%;
-   height: calc(100% - 170px);
+   height: calc(100% - (10px + 150px + 50px));
+}
+
+.input-data-form-mfa{
+   width: 100%;
+   height: calc(100% - 180px);
    display: flex;
    justify-content: center;
    flex-direction: column;
    align-items: center;
 }
-
 
 .input-content form{
    width: 100%;
