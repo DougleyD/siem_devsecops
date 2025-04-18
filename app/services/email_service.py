@@ -22,7 +22,7 @@ class EmailService:
         msg.set_content(f'''
         Olá 😀
         
-        Seu código de verificação para cadastro no EventTrace é: {code} 🔑
+        Seu código de verificação no EventTrace é: {code}
         
         Este código expira em 5 minutos ⏳
         
