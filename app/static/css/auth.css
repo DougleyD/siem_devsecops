@@ -1,245 +1,272 @@
 /* ===== ESTILOS BASE ===== */
 body {
-   font: 500 12px Calibri, Arial, 'Trebuchet MS', sans-serif;
-   background-color: #e5e7eb;
-   margin: 0;
-   padding: 0;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   height: 100vh;
- }
- 
- /* ===== FORMULÁRIOS ===== */
- .form-register,
- .form-login,
- .form-setup-tfa,
- .form-verify-tfa {
-   background-color: #fff;
-   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-   border-radius: 5px;
- }
- 
- .form-register { width: 470px; height: 560px; }
- .form-login { width: 420px; height: 410px; }
- .form-setup-tfa { width: 420px; height: 540px; }
- .form-verify-tfa { width: 420px; height: 370px; }
- 
- /* ===== LOGO ===== */
- .logo-image {
-   width: 100%;
-   height: 150px;
-   font: bold 28px sans-serif;
-   display: flex;
-   justify-content: center;
-   align-items: center;
- }
- 
- .logo-image img{
-   width: 190px;
-   height: 120px;
- }
- 
- /* ===== REDIRECIONAMENTO E INFORMATIVO ===== */
- .redirect-link,
- .info-tfa {
-   width: 100%;
-   font-size: 14px;
-   margin-top: 10px;
- }
- 
- .redirect-link {
-   height: 40px;
-   display: flex;
-   justify-content: center;
-   align-items: baseline;
- }
- 
- .redirect-link a {
-   text-decoration: none;
-   color: #4a90e2;
- }
- 
- .info-tfa {
-   height: 50px;
-   display: flex;
-   flex-direction: column;
-   text-align: center;
- }
- 
- .info-tfa p {
-   margin: 5px;
- }
- 
- /* ===== CONTEÚDO PRINCIPAL ===== */
- .form-input {
-   width: 100%;
-   height: calc(100% - 200px); /* 150px logo + 50px info */
- }
- 
- .form-tfa{
-   width: 100%;
-   height: calc(100% - (10px + 150px + 50px));
+  font: 500 12px Calibri, Arial, 'Trebuchet MS', sans-serif;
+  background-color: #e5e7eb;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
- .form-input form{ height: 100%;}
- .input-tfa { height: calc(100% - 180px);}
+/* ===== FORMULÁRIOS ===== */
+.form-register,
+.form-login,
+.form-setup-tfa,
+.form-verify-tfa,
+.form-forgot,
+.form-update {
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
 
- .form-input form,
- .input-tfa {
-   width: 100%;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
- }
- 
- /* ===== QR CODE ===== */
- .qr-code{
-   width: 100%;
-   height: 180px;
-   display: flex;
-   justify-content: center;
- }
- 
- .qr-code-img {
-   width: 200px;
-   height: 100%;
-   display: flex;
-   justify-content: center;
-   align-items: flex-end;
-   margin-left: 40px;
- }
- 
- .qr-code-img img {
-   width: 160px;
-   height: 160px;
- }
- 
- .qr-code-refresh,
- .qr-code-refresh form {
-   width: 41px;
-   height: 100%;
- }
- 
- .qr-code-bttn {
-   padding: 10px 14px;
-   margin-top: 30px;
-   background-color: #4f647a;
-   border: none;
-   color: white;
-   border-radius: 3px;
-   transition: background-color 0.4s;
- }
- 
- .qr-code-bttn:hover {
-   cursor: pointer;
-   background-color: #2f445e;
- }
- 
- /* ===== CAMPOS DE ENTRADA ===== */
- .input-field-data,
- .input-field-code {
-   width: 70%;
-   height: 35px;
-   margin-bottom: 15px;
-   display: flex;
- }
- 
- .input-field-data i,
- .input-field-code i {
-   background-color: #313131;
-   width: 40px;
-   height: 39px;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   border-radius: 5px 0 0 5px;
-   color: white;
-   font-size: 12px;
- }
- 
- .input-field-data input,
- .input-field-code input {
-   height: 35px;
-   padding-left: 10px;
-   border: 1px solid #c7c9ca;
-   border-radius: 0 5px 5px 0;
-   transition: border-color 0.5s ease;
- }
- 
- .input-field-data input {
-   width: calc(100% - 40px);
- }
- 
- .input-field-code {
-   align-items: baseline;
- }
- 
- .input-field-code input {
-   width: 40%;
- }
- 
- .input-field-data input:focus,
- .input-field-code input:focus {
-   outline: none;
-   border-color: #4a90e2;
- }
- 
- .input-field-code button {
-   width: 40%;
-   height: 35px;
-   margin-left: 20px;
-   font: bold 12px sans-serif;
-   background-color: #4f647a;
-   border: none;
-   color: white;
-   border-radius: 3px;
-   transition: background-color 0.4s;
- }
- 
- .input-field-code button:hover {
-   cursor: pointer;
-   background-color: #2f445e;
- }
- 
- /* ===== BOTÕES PRINCIPAIS ===== */
- .bttn-register-data,
- .bttn-login-data,
- .bttn-tfa-data {
-   width: 70%;
-   height: 32px;
-   font: bold 12px sans-serif;
-   background-color: #4a90e2;
-   border: none;
-   color: white;
-   border-radius: 3px;
-   transition: background-color 0.4s;
- }
- 
- .bttn-register-data { margin-top: 25px; }
- .bttn-login-data,
- .bttn-tfa-data { margin-top: 10px; }
- 
- .bttn-register-data:hover,
- .bttn-login-data:hover,
- .bttn-tfa-data:hover {
-   cursor: pointer;
-   background-color: #3b72b1;
- }
- 
- /* ===== MENSAGENS DE ALERTA ===== */
- .alert-message {
-   margin-top: 15px;
-   padding: 3px 5px;
- }
- 
- .alert-message.error {
-   background-color: #f5d1d7;
-   color: #c62828;
- }
- 
- .alert-message.success {
-   background-color: #d1f5df;
-   color: #2e7d32;
- }
+.form-register { width: 470px; height: 560px; }
+.form-login { width: 420px; height: 440px; }
+.form-setup-tfa { width: 420px; height: 540px; }
+.form-verify-tfa { width: 420px; height: 370px; }
+.form-forgot { width: 470px; height: 430px; }
+.form-update { width: 470px; height: 430px; }
+
+/* ===== LOGO ===== */
+.logo-image {
+  width: 100%;
+  height: 150px;
+  font: bold 28px sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-image img{
+  width: 190px;
+  height: 120px;
+}
+
+/* ===== REDIRECIONAMENTO / INFORMATIVO ===== */
+.redirect-link,
+.info-user {
+  width: 100%;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.redirect-link {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.redirect-link a {
+  text-decoration: none;
+  color: #4a90e2;
+}
+
+.forgot-link{
+  width: 70%;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.forgot-link {
+  height: 20px;
+  display: flex;
+  align-items: end;
+}
+
+.forgot-link a {
+  text-decoration: none;
+  color: #4a90e2;
+}
+
+.info-user {
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.info-user p {
+  margin: 5px;
+}
+
+/* ===== CONTEÚDO PRINCIPAL ===== */
+.form-input {
+  width: 100%;
+  height: calc(100% - 200px); /* 150px logo + 50px info */
+}
+
+.form-tfa{
+  width: 100%;
+  height: calc(100% - (10px + 150px + 50px));
+}
+
+.form-input form{ height: 100%;}
+.input-tfa { height: calc(100% - 180px);}
+
+.form-input form,
+.input-tfa {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== QR CODE ===== */
+.qr-code{
+  width: 100%;
+  height: 180px;
+  display: flex;
+  justify-content: center;
+}
+
+.qr-code-img {
+  width: 200px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-left: 40px;
+}
+
+.qr-code-img img {
+  width: 160px;
+  height: 160px;
+}
+
+.qr-code-refresh,
+.qr-code-refresh form {
+  width: 41px;
+  height: 100%;
+}
+
+.qr-code-bttn {
+  padding: 10px 14px;
+  margin-top: 30px;
+  background-color: #4f647a;
+  border: none;
+  color: white;
+  border-radius: 3px;
+  transition: background-color 0.4s;
+}
+
+.qr-code-bttn:hover {
+  cursor: pointer;
+  background-color: #2f445e;
+}
+
+/* ===== CAMPOS DE ENTRADA ===== */
+.input-field-data,
+.input-field-code {
+  width: 70%;
+  height: 35px;
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.input-field-data i,
+.input-field-code i {
+  background-color: #313131;
+  width: 40px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px 0 0 5px;
+  color: white;
+  font-size: 12px;
+}
+
+.input-field-data input,
+.input-field-code input {
+  height: 35px;
+  padding-left: 10px;
+  border: 1px solid #c7c9ca;
+  border-radius: 0 5px 5px 0;
+  transition: border-color 0.5s ease;
+}
+
+.input-field-data input {
+  width: calc(100% - 40px);
+}
+
+.input-field-code {
+  align-items: baseline;
+}
+
+.input-field-code input {
+  width: 40%;
+}
+
+.input-field-data input:focus,
+.input-field-code input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.input-field-code button {
+  width: 40%;
+  height: 35px;
+  margin-left: 20px;
+  font: bold 12px sans-serif;
+  background-color: #4f647a;
+  border: none;
+  color: white;
+  border-radius: 3px;
+  transition: background-color 0.4s;
+}
+
+.input-field-code button:hover {
+  cursor: pointer;
+  background-color: #2f445e;
+}
+
+/* ===== BOTÕES PRINCIPAIS ===== */
+.bttn-register-data,
+.bttn-login-data,
+.bttn-tfa-data,
+.bttn-forgot-data,
+.bttn-update-data {
+  width: 70%;
+  height: 32px;
+  font: bold 12px sans-serif;
+  background-color: #4a90e2;
+  border: none;
+  color: white;
+  border-radius: 3px;
+  transition: background-color 0.4s;
+}
+
+.bttn-register-data { margin-top: 25px; }
+.bttn-login-data,
+.bttn-tfa-data,
+.bttn-forgot-data,
+.bttn-update-data  { margin-top: 10px; }
+
+.bttn-register-data:hover,
+.bttn-login-data:hover,
+.bttn-tfa-data:hover,
+.bttn-forgot-data:hover,
+.bttn-update-data:hover {
+  cursor: pointer;
+  background-color: #3b72b1;
+}
+
+/* ===== MENSAGENS DE ALERTA ===== */
+.alert-message {
+  margin-top: 15px;
+  padding: 3px 5px;
+}
+
+.alert-message.error {
+  background-color: #f5d1d7;
+  color: #c62828;
+}
+
+.alert-message.success {
+  background-color: #d1f5df;
+  color: #2e7d32;
+}
