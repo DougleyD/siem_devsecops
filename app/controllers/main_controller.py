@@ -8,4 +8,4 @@ def root():
 
 @main_bp.route('/dashboard', methods=['GET'])
 def dashboard():
-   return render_template('application/dashboard.html', title='EventTracer | Dashboard')
+   return render_template('application/dashboard.html', title='EventTrace | Dashboard')
