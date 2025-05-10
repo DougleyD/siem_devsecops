@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="header-content">
-   <div class="header-logo"><p>DEVSECOPS</p></div>
+   <div class="header-logo"><img src="{{ url_for('static', filename='img/favicon.png')}}" alt="Logo"/><b><a href="{{ url_for('main.dashboard') }}">EventTrace</b></a></div>
    <div class="header-menu">
       <p>Welcome, user!</p>
       <p><a href="{{ url_for('main.root') }}">Logout</a></p>
@@ -16,29 +16,58 @@
 <div class="main-content">
    <div class="nav-content">
       <div class="menu-content">
-         <p>1-MENU</p>
-         <p>2-MENU</p>
-         <p>3-MENU</p>
+         <div class="menu-option">
+            <p><b>MANAGER AGENTS</b></p>
+            <p class="option-context">Gerencie os agentes que se encontram instalados nos dispositivos.</p>
+         </div>
+         <div class="menu-option">
+            <p><b>EVENT MONITORING</b></p>
+            <p class="option-context">Visualize os eventos das atividades dos usuários e configure as fontes de dados.</p>
+         </div>
+         <div class="menu-option">
+            <p><b>TRIGGERS</b></p>
+            <p class="option-context">Defina gatilhos para executar uma ação quando um evento ocorrer.</p>
+         </div>
+         <div class="menu-option">
+            <p><b>NOTIFICATION</b></p>
+            <p class="option-context">Defina um canal de comunicação para enviar os alertas programados.</p>
+         </div>
       </div>
       <div class=project-content>
-        <p>DevSecOps - PUCPR</p>
+        <p><b>DevSecOps - PUCPR</b></p>
       </div>
    </div>
    <div class="section-content">
-      <div class="dash-content">
-
+      <div class="dash-line1">
+         <div class="dash-timeline">
+            <div class="timeline-title"> <p>Timeline</p></div>
+            <div class="timeline-filter"></div>
+            <div class="timeline-graph"></div>
+         </div>
+         <div class="dash-bar-horizontal">
+            <div class="bar-horizontal-title"> <p>Horizontal Bar</p></div>
+            <div class="bar-horizontal-graph"></div>
+         </div>
       </div>
-      <div class="filter-content">
-         
-      </div>
-      <div class="info-content">
-         
+      <div class="dash-line2">
+         <div class="dash-bar-vertical">
+            <div class="bar-vertical-title"> <p>Vertical Bar</p></div>
+            <div class="bar-vertical-graph"></div>
+         </div>
+         <div class="dash-donut">
+            <div class="donut-title"> <p>Donut</p></div>
+            <div class="donut-graph"></div>
+         </div>
+         <div class="dash-pie">
+            <div class="donut-title"> <p>Pie</p></div>
+            <div class="donut-graph"></div>
+         </div>
       </div>
    </div>
 </div>
 
 <footer>
-   <p>Developed by Daniel Mendes and Dougley Doll - © 2025.</p>
+   <p><b>Developed by Daniel Mendes and Dougley Doll - © 2025.</b></p>
 </footer>
 {% endblock %}
 
