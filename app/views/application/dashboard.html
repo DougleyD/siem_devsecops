@@ -39,28 +39,69 @@
    </div>
    <div class="section-content">
       <div class="dash-line1">
-         <div class="dash-timeline">
-            <div class="timeline-title"> <p>Timeline</p></div>
-            <div class="timeline-filter"></div>
-            <div class="timeline-graph"></div>
+         <div class="dash-value">
+            <div class="value-data">2</div>
+            <div class="value-title">Agents</div>
          </div>
-         <div class="dash-bar-horizontal">
-            <div class="bar-horizontal-title"> <p>Horizontal Bar</p></div>
-            <div class="bar-horizontal-graph"></div>
+         <div class="dash-value">
+            <div class="value-data">100%</div>
+            <div class="value-title">Updates</div>
+         </div>
+         <div class="dash-value">
+            <div class="value-data">21</div>
+            <div class="value-title">Events</div>
+         </div>
+         <div class="dash-value">
+            <div class="value-data">16</div>
+            <div class="value-title">Authentication Failure</div>
+         </div>
+         <div class="dash-value">
+            <div class="value-data">3</div>
+            <div class="value-title">CVEs</div>
          </div>
       </div>
       <div class="dash-line2">
+         <div class="dash-timeline">
+            <div class="timeline-title"> <p>Quantidade de Eventos ao Longo do Tempo</p></div>
+            <div class="timeline-filter">
+               <div class="filter-group">
+                  <label for="startDateTime"></label>
+                  <input type="date" id="startDate" class="date-input" value="">
+                  <input type="time" id="startTime" class="time-input" value="00:00">
+                  <label for="endDateTime"></label>
+                  <input type="date" id="endDate" class="date-input" value="">
+                  <input type="time" id="endTime" class="time-input" value="23:59">
+               </div>
+            </div>
+            <div class="timeline-graph">
+               <canvas id="eventsTimeline"></canvas>
+            </div>
+         </div>
          <div class="dash-bar-vertical">
-            <div class="bar-vertical-title"> <p>Vertical Bar</p></div>
-            <div class="bar-vertical-graph"></div>
+            <div class="bar-vertical-title"> <p>Top 7 Categorias de Eventos</p></div>
+            <div class="bar-vertical-graph"> 
+               <canvas id="verticalBarChart"></canvas>
+            </div>
+         </div>
+      </div>
+      <div class="dash-line3">
+         <div class="dash-bar-horizontal">
+            <div class="bar-horizontal-title"> <p>Top 10 IPs com Maior Tráfego de Rede</p></div>
+            <div class="bar-horizontal-graph">
+               <canvas id="horizontalBarChart"></canvas>
+            </div>
          </div>
          <div class="dash-donut">
-            <div class="donut-title"> <p>Donut</p></div>
-            <div class="donut-graph"></div>
+            <div class="donut-title"> <p>Sistemas Operacionais Existentes</p></div>
+            <div class="donut-graph">
+               <canvas id="donutChart"></canvas>
+            </div>
          </div>
          <div class="dash-pie">
-            <div class="donut-title"> <p>Pie</p></div>
-            <div class="donut-graph"></div>
+            <div class="pie-title"> <p>Status dos Hosts</p></div>
+            <div class="pie-graph">
+               <canvas id="pieChart"></canvas>
+            </div>
          </div>
       </div>
    </div>
