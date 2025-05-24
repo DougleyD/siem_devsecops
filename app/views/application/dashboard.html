@@ -8,26 +8,30 @@
 <div class="header-content">
    <div class="header-logo"><img src="{{ url_for('static', filename='img/favicon.png')}}" alt="Logo"/><b><a href="{{ url_for('main.dashboard') }}">EventTrace</b></a></div>
    <div class="header-menu">
-      <p>Welcome, user!</p>
-      <p><a href="{{ url_for('main.root') }}">Logout</a></p>
+      <p>Welcome, {{ user.username }}!</p>
+      <p><a href="{{ url_for('auth.logout') }}">Logout</a></p>
    </div>
 </div>
 
 <div class="main-content">
    <div class="nav-content">
       <div class="menu-content">
+         {% if user.is_admin %}
          <div class="menu-option">
             <p><b>MANAGER AGENTS</b></p>
             <p class="option-context">Gerencie os agentes que se encontram instalados nos dispositivos.</p>
          </div>
+         {% endif %}
          <div class="menu-option">
             <p><b>EVENT MONITORING</b></p>
             <p class="option-context">Visualize os eventos das atividades dos usuários e configure as fontes de dados.</p>
          </div>
+         {% if user.is_admin %}
          <div class="menu-option">
             <p><b>TRIGGERS</b></p>
             <p class="option-context">Defina gatilhos para executar uma ação quando um evento ocorrer.</p>
          </div>
+         {% endif %}
          <div class="menu-option">
             <p><b>NOTIFICATION</b></p>
             <p class="option-context">Defina um canal de comunicação para enviar os alertas programados.</p>

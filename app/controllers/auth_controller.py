@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from app.services.auth_service import login_required
 from app.services.email_service import EmailService
 from app.services.mfa_service import MFAService
-from werkzeug.security import check_password_hash
 from datetime import datetime
 from app.models.users import User
 from app import db
@@ -104,11 +104,14 @@ def login():
         password = request.form.get('password')
         user = User.query.filter_by(email=email).first()
         
-        if not user or not check_password_hash(user.password_hash, password):
+        if not user or not user.check_password(password):
             flash('E-mail ou senha incorretos', 'error')
             return render_template('auth/login.html', title='EventTrace | Login')
         
-        session['user_id'] = user.id
+        # Gera token de sessão seguro (não usa o ID)
+        session_token = user.generate_session_token()
+        session['session_token'] = session_token
+        session['authenticated'] = False
         
         if not user.tfa_enabled:
             return redirect(url_for('auth.setup_mfa'))
@@ -117,13 +120,20 @@ def login():
         
     return render_template('auth/login.html', title='EventTrace | Login')
 
+@auth_bp.route('/logout')
+def logout():
+    if 'session_token' in session:
+        user = User.query.filter_by(session_token=session['session_token']).first()
+        if user:
+            user.session_token = None
+            user.session_expiration = None
+            db.session.commit()
+    session.clear()
+    return redirect(url_for('auth.login'))
+
 @auth_bp.route('/setup_mfa', methods=['GET', 'POST'])
-def setup_mfa():
-    if 'user_id' not in session:
-        return redirect(url_for('auth.login'))
-    
-    user = User.query.get(session['user_id'])
-    
+@login_required
+def setup_mfa(user):
     if request.method == 'POST':
         code = request.form.get('code')
         
@@ -147,12 +157,8 @@ def setup_mfa():
                          qr_code=qr_code)
 
 @auth_bp.route('/verify_mfa', methods=['GET', 'POST'])
-def verify_mfa():
-    if 'user_id' not in session:
-        return redirect(url_for('auth.login'))
-    
-    user = User.query.get(session['user_id'])
-    
+@login_required
+def verify_mfa(user):
     if request.method == 'POST':
         code = request.form.get('code')
         
