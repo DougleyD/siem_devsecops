@@ -26,7 +26,7 @@ class User(db.Model):
     def generate_session_token(self):
         """Gera um token de sessão seguro e define a expiração"""
         self.session_token = secrets.token_urlsafe(32)
-        self.session_expiration = datetime.utcnow() + timedelta(minutes=1)
+        self.session_expiration = datetime.utcnow() + timedelta(minutes=60)
         db.session.commit()
         return self.session_token
 

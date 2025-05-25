@@ -4,44 +4,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
-{% block content %}
-<div class="header-content">
-   <div class="header-logo"><img src="{{ url_for('static', filename='img/favicon.png')}}" alt="Logo"/><b><a href="{{ url_for('main.dashboard') }}">EventTrace</b></a></div>
-   <div class="header-menu">
-      <p>Welcome, {{ user.username }}!</p>
-      <p><a href="{{ url_for('auth.logout') }}">Logout</a></p>
-   </div>
-</div>
-
-<div class="main-content">
-   <div class="nav-content">
-      <div class="menu-content">
-         {% if user.is_admin %}
-         <div class="menu-option">
-            <p><b>MANAGER AGENTS</b></p>
-            <p class="option-context">Gerencie os agentes que se encontram instalados nos dispositivos.</p>
-         </div>
-         {% endif %}
-         <div class="menu-option">
-            <p><b>EVENT MONITORING</b></p>
-            <p class="option-context">Visualize os eventos das atividades dos usuários e configure as fontes de dados.</p>
-         </div>
-         {% if user.is_admin %}
-         <div class="menu-option">
-            <p><b>TRIGGERS</b></p>
-            <p class="option-context">Defina gatilhos para executar uma ação quando um evento ocorrer.</p>
-         </div>
-         {% endif %}
-         <div class="menu-option">
-            <p><b>NOTIFICATION</b></p>
-            <p class="option-context">Defina um canal de comunicação para enviar os alertas programados.</p>
-         </div>
-      </div>
-      <div class=project-content>
-        <p><b>DevSecOps - PUCPR</b></p>
-      </div>
-   </div>
-   <div class="section-content">
+{% block section %}
       <div class="dash-line1">
          <div class="dash-value">
             <div class="value-data">2</div>
@@ -61,7 +24,7 @@
          </div>
          <div class="dash-value">
             <div class="value-data">3</div>
-            <div class="value-title">CVEs</div>
+            <div class="value-title">Triggers</div>
          </div>
       </div>
       <div class="dash-line2">
@@ -108,11 +71,387 @@
             </div>
          </div>
       </div>
-   </div>
-</div>
-
-<footer>
-   <p><b>Developed by Daniel Mendes and Dougley Doll - © 2025.</b></p>
-</footer>
 {% endblock %}
 
+{% block script %}
+<script>
+   // TIMELINE 
+   const ctx1 = document.getElementById('eventsTimeline').getContext('2d');
+
+   // Gerar dados fictícios para 24 horas (a cada 30 minutos)
+   const labels = [];
+   const data = [];
+
+   for (let hour = 0; hour < 24; hour++) {
+   for (let minute = 0; minute < 60; minute += 30) {
+   // Formatar o rótulo como HH:MM
+   const timeLabel = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+   labels.push(timeLabel);
+
+   // Gerar dados fictícios com variação ao longo do dia
+   let value;
+   if (hour >= 8 && hour < 12) {
+       // Manhã - aumento gradual
+       value = 20 + Math.floor(Math.random() * 30) + (hour - 8) * 10;
+   } else if (hour >= 12 && hour < 18) {
+       // Tarde - pico de atividade
+       value = 60 + Math.floor(Math.random() * 40);
+   } else if (hour >= 18 && hour < 22) {
+       // Noite - diminuição gradual
+       value = 40 + Math.floor(Math.random() * 30) - (hour - 18) * 5;
+   } else {
+       // Madrugada - atividade baixa
+       value = 5 + Math.floor(Math.random() * 15);
+   }
+
+   data.push(Math.max(0, value)); // Garantir que não temos valores negativos
+   }
+   }
+
+   // Criar o gráfico
+   const chart = new Chart(ctx1, {
+   type: 'line',
+   data: {
+   labels: labels,
+   datasets: [{
+       data: data,
+       borderColor: 'rgb(75, 192, 192)',
+       tension: 0.1,
+       fill: false,
+       pointRadius: 3,
+       pointBackgroundColor: 'rgba(75, 192, 192, 0.5)'
+   }]
+   },
+   options: {
+   responsive: true,
+   plugins: {
+       title: {
+       display: false,
+       },
+       legend: {
+       display: false,
+       },
+       tooltip: {
+       mode: 'index',
+       intersect: false
+       }
+   },
+   scales: {
+       x: {
+       title: {
+           display: false,
+       },
+       ticks: {
+           maxRotation: 45,
+           minRotation: 45,
+           // Mostrar apenas algumas horas para não poluir
+           callback: function(value, index) {
+           return index % 4 === 0 ? this.getLabelForValue(value) : '';
+           }
+       }
+       },
+       y: {
+       title: {
+           display: false,
+       },
+       min: 0
+       }
+   },
+   interaction: {
+       mode: 'nearest',
+       axis: 'x',
+       intersect: false
+   }
+   }
+   });
+</script>
+<script>
+const ctx2 = document.getElementById('verticalBarChart').getContext('2d');
+
+new Chart(ctx2, {
+ type: 'bar',
+ data: {
+   labels: ["SQL Injection", "Sudo execution", "Modify file", "Create file", "Remove data", "SSH Connection", "XSS Injection"],
+   datasets: [{
+     data: [125, 110, 95, 85, 75, 65, 60],
+     backgroundColor: [
+     'rgba(255, 99, 132, 0.7)',
+     'rgba(54, 162, 235, 0.7)',
+     'rgba(255, 206, 86, 0.7)',
+     'rgba(75, 192, 192, 0.7)',
+     'rgba(153, 102, 255, 0.7)',
+     'rgba(255, 159, 64, 0.7)',
+     'rgba(199, 199, 199, 0.7)',
+   ],
+     borderWidth: 0
+   }]
+ },
+ options: {
+   plugins: {
+     legend: {
+       display: false
+     },
+     // Configuração para mostrar as CATEGORIAS (labels) em cima das barras
+     datalabels: {
+       anchor: 'end', // Ancora no início da barra (topo)
+       align: 'top',
+       offset: 0, // Espaço acima da barra
+       rotation: -20,
+       formatter: function(value, context) {
+         return context.chart.data.labels[context.dataIndex]; // Retorna a label (1, 2, 3...)
+       },
+       font: {
+         size: 12
+       },
+       color: '#333'
+     },
+     // Remove os valores do tooltip
+     tooltip: {
+       enabled: false
+     }
+   },
+   scales: {
+     x: {
+       grid: {
+         display: false
+       },
+       ticks: {
+         display: false // Oculta as labels padrão do eixo X
+       }
+     },
+     y: {
+       grid: {
+         display: true
+       },
+       beginAtZero: true
+     }
+   }
+ },
+ plugins: [ChartDataLabels]
+});
+</script>
+<script>
+   // Obter contexto do canvas
+   const ctx3 = document.getElementById('horizontalBarChart').getContext('2d');
+   
+   // Criar gráfico diretamente
+   new Chart(ctx3, {
+       type: 'bar',
+       data: {
+       labels: [
+           "172.16.1.1",
+           "172.16.1.2",
+           "172.16.1.3",
+           "172.16.1.4",
+           "172.16.1.5",
+           "172.16.1.6",
+           "172.16.1.7",
+           "172.16.1.8",
+           "172.16.1.9",
+           "172.16.1.10"
+       ],
+       datasets: [{
+           data: [125, 110, 95, 85, 75, 65, 60, 55, 45, 40],
+           backgroundColor: [
+           'rgba(255, 99, 132, 0.7)',
+           'rgba(255, 99, 132, 0.7)',
+           'rgba(255, 99, 132, 0.7)',
+           'rgba(255, 206, 86, 0.7)',
+           'rgba(255, 206, 86, 0.7)',
+           'rgba(255, 206, 86, 0.7)',
+           'rgba(255, 206, 86, 0.7)',
+           'rgba(75, 192, 192, 0.7)',
+           'rgba(75, 192, 192, 0.7)',
+           'rgba(75, 192, 192, 0.7)',
+           ],
+           borderColor: [
+           'rgba(255, 99, 132, 1)',
+           'rgba(255, 99, 132, 1)',
+           'rgba(255, 99, 132, 1)',
+           'rgba(255, 206, 86, 1)',
+           'rgba(255, 206, 86, 1)',
+           'rgba(255, 206, 86, 1)',
+           'rgba(255, 206, 86, 1)',
+           'rgba(75, 192, 192, 1)',
+           'rgba(75, 192, 192, 1)',
+           'rgba(75, 192, 192, 1)',
+           ],
+           borderWidth: 1
+       }]
+       },
+       options: {
+       indexAxis: 'y',
+       responsive: true,
+       plugins: {
+           legend: {
+           display: false,
+           position: 'right',
+           labels: {
+               boxWidth: 20,
+               padding: 20
+           }
+           },
+           title: {
+           display: false,
+           font: {
+               size: 16
+           }
+           },
+           tooltip: {
+           callbacks: {
+               label: function(context) {
+               return `${context.parsed.x}`;
+               }
+           }
+           }
+       },
+       scales: {
+           x: {
+           title: {
+               display: false,
+               font: {
+               weight: 'bold'
+               }
+           },
+           beginAtZero: true,
+           grid: {
+               display: true
+           }
+           },
+           y: {
+           grid: {
+               display: false
+           }
+           }
+       }
+       }
+   });
+</script>
+<script>
+   // Dados fictícios - 5 categorias (top 3 + outros)
+   const allData = [45, 30, 25, 15, 10]; // 5 categorias
+   const top3 = allData.slice(0, 2); // Pegar as 3 primeiras
+   const others = allData.slice(3).reduce((a, b) => a + b, 0); // Somar o restante
+ 
+   // Obter contexto do canvas
+   const ctx4 = document.getElementById('donutChart').getContext('2d');
+   
+   // Criar gráfico de donut
+   new Chart(ctx4, {
+     type: 'doughnut',
+     data: {
+       labels: ["Linux", "Windows", "Outros"],
+       datasets: [{
+         data: [...top3, others],
+         backgroundColor: [
+           'rgba(40, 159, 64, 0.6)',
+           'rgba(54, 162, 235, 0.7)',
+           'rgba(199, 199, 199, 0.7)'
+         ],
+         borderColor: [
+           'rgba(40, 159, 64, 1)',
+           'rgba(54, 162, 235, 1)',
+           'rgba(199, 199, 199, 1)'
+         ],
+         borderWidth: 1
+       }]
+     },
+     options: {
+       responsive: true,
+       cutout: '50%', // Torna o donut mais fino
+       plugins: {
+         legend: {
+           display: true,
+           position: 'bottom',
+           labels: {
+             boxWidth: 20,
+             padding: 20,
+             font: {
+               size: 14
+             }
+           }
+         },
+         title: {
+           display: false,
+           font: {
+             size: 16
+           }
+         },
+         datalabels: {
+           formatter: (value) => {
+             return `${value}%`;
+           },
+           color: '#fff',
+           font: {
+             weight: 'bold'
+           }
+         }
+       }
+     },
+     plugins: [ChartDataLabels]
+   });
+ </script>
+ <script>
+   // Obter contexto do canvas
+   const ctx = document.getElementById('pieChart').getContext('2d');
+   
+   // Criar gráfico de pizza
+   new Chart(ctx, {
+     type: 'pie',
+     data: {
+       labels: ["Up", "Down"],
+       datasets: [{
+         data: [65, 35], // Valores fictícios (65% Up, 35% Down)
+         backgroundColor: [
+           'rgba(40, 159, 64, 0.9)', // Verde para Up
+           'rgba(255, 99, 132, 1)'  // Vermelho para Down;
+
+         ],
+         borderColor: [
+           'rgba(40, 159, 64, 1)',
+           'rgba(255, 99, 132, 1)'
+         ],
+         borderWidth: 1
+       }]
+     },
+     options: {
+       responsive: true,
+       plugins: {
+         legend: {
+           display: true,
+           position: 'bottom',
+           labels: {
+             boxWidth: 20,
+             padding: 20,
+             font: {
+               size: 14
+             }
+           }
+         },
+         title: {
+           display: false
+         },
+         datalabels: {
+           formatter: (value) => {
+             return `${value}%`;
+           },
+           color: '#fff',
+           font: {
+             weight: 'bold'
+           }
+         }
+       }
+     },
+     plugins: [ChartDataLabels]
+   });
+ </script>
+
+<script>
+ // Definir a data atual como padrão
+ document.addEventListener('DOMContentLoaded', function() {
+   const today = new Date().toISOString().split('T')[0];
+   document.getElementById('startDate').value = today;
+   document.getElementById('endDate').value = today;
+ });
+</script>
+{% endblock %}
