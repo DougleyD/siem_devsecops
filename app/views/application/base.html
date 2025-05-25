@@ -35,13 +35,13 @@
           </a>
           {% if user.is_admin %}
           <a href="{{ url_for('view.events') }}" class="menu-option">
-             <p><b>TRIGGERS</b></p>
-             <p class="option-context">Defina gatilhos para executar uma ação quando um evento ocorrer.</p>
+             <p><b>NOTIFICATION</b></p>
+             <p class="option-context">Defina um canal de comunicação para enviar os alertas programados.</p>
           </a>
           {% endif %}
           <a href="{{ url_for('view.events') }}" class="menu-option">
-             <p><b>NOTIFICATION</b></p>
-             <p class="option-context">Defina um canal de comunicação para enviar os alertas programados.</p>
+             <p><b>DOWNLOAD</b></p>
+             <p class="option-context">Realize o download do agent para seu sistema clicando aqui.</p>
           </a>
        </div>
        <div class=project-content>
