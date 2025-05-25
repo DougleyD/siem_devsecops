@@ -17,9 +17,11 @@ def start_app(config_class=Config):
    # Registra blueprints
    from app.controllers.main_controller import main_bp
    from app.controllers.auth_controller import auth_bp
-   
+   from app.controllers.view_controller import view_bp
+
    app.register_blueprint(main_bp)
    app.register_blueprint(auth_bp)
+   app.register_blueprint(view_bp)
    
 #   from app.middlewares.auth_middleware import setup_auth_middleware
 #   setup_auth_middleware(app)

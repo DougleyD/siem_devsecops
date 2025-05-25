@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask import Blueprint, redirect, render_template, url_for
 
 from app.services.auth_service import login_required

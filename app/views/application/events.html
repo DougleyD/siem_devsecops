@@ -1,0 +1,189 @@
+{% extends "application/base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/events.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% endblock %}
+
+{% block section %}
+<div class="filter-line">
+   <div class="filter-content">
+      <form id="filter-form">
+         <div class="icon-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+         </div>
+         <input type="text" id="search-input" placeholder="Search by field" />
+         <select id="agent-select">
+            <option value="">All agents</option>
+               <option value="Agent1">Agent 1</option>
+               <option value="Agent2">Agent 2</option>
+               <option value="Agent3">Agent 3</option>
+               <option value="Agent4">Agent 4</option>
+         </select>
+         
+         <select id="sort-select">
+            <option value="name_asc">Order by name (A-Z)</option>
+            <option value="name_desc">Order by name (Z-A)</option>
+            <option value="folder_asc">Order by folder (A-Z)</option>
+            <option value="folder_desc">Order by folder (Z-A)</option>
+            <option value="strength">Força (Seguro primeiro)</option>
+         </select>
+      </form>
+   </div>
+</div>
+<div class="title-line">
+   <div class="title-info">
+      <button class="title-bttn"><i class="fa-solid fa-chart-simple"></i></button>
+      <div class="field-time">Timestamp</div>
+      <div class="field-event">Event ID</div>
+      <div class="field-agent">Agent ID</div>
+      <div class="field-host">Hostname</div>
+      <div class="field-ip">IP</div>
+      <div class="field-desc">Description</div>
+      <div class="field-cat">Category</div>
+   </div>
+</div>
+<div class="event-line">
+   <div class="resume-info">
+      <button class="field-bttn"><i class="fa-solid fa-chevron-right"></i></button>
+      <div class="field-time">Timestamp</div>
+      <div class="field-event">1495</div>
+      <div class="field-agent">00100</div>
+      <div class="field-host">Daniel</div>
+      <div class="field-ip">192.168.31.134</div>
+      <div class="field-desc">Authentication failure</div>
+      <div class="field-cat">SSH failed</div>
+   </div>
+</div>
+<div class="complete-line">
+   <div class="complete-info">
+      <div class="complete-field">◾ User: daniel</div>
+      <div class="complete-field">◾ File directory: /home/daniel/Documents</div>
+      <div class="complete-field">◾ Service: SSH</div>
+      <div class="complete-field">◾ Port: 22</div>
+   </div>
+</div>
+<div class="event-line">
+   <div class="resume-info">
+      <button class="field-bttn"><i class="fa-solid fa-chevron-right"></i></button>
+      <div class="field-time">Timestamp</div>
+      <div class="field-event">1495</div>
+      <div class="field-agent">00100</div>
+      <div class="field-host">Daniel</div>
+      <div class="field-ip">192.168.31.134</div>
+      <div class="field-desc">Authentication failure</div>
+      <div class="field-cat">SSH failed</div>
+   </div>
+</div>
+<div class="complete-line">
+   <div class="complete-info">
+      <div class="complete-field">◾ User: daniel</div>
+      <div class="complete-field">◾ File directory: /home/daniel/Documents</div>
+      <div class="complete-field">◾ Service: SSH</div>
+      <div class="complete-field">◾ Port: 22</div>
+   </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+var coll = document.getElementsByClassName("field-bttn");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    
+    // Encontra o elemento pai `event-line` que contém o botão clicado
+    var eventLine = this.closest('.event-line');
+    
+    // Encontra o próximo elemento `complete-line` após o `event-line`
+    var completeLine = eventLine.nextElementSibling;
+    
+    // Verifica se o próximo elemento é um `complete-line`
+    if (completeLine && completeLine.classList.contains('complete-line')) {
+      // Alterna a visibilidade do `complete-line`
+      completeLine.style.display = completeLine.style.display === "block" ? "none" : "block";
+      
+      // Altera o ícone (chevron-right ↔ chevron-down)
+      var icon = this.querySelector('i');
+      if (icon.classList.contains('fa-chevron-right')) {
+        icon.classList.replace('fa-chevron-right', 'fa-chevron-down');
+      } else {
+        icon.classList.replace('fa-chevron-down', 'fa-chevron-right');
+      }
+    }
+  });
+}
+</script>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function() {
+     const searchInput = document.getElementById('search-input');
+     const folderSelect = document.getElementById('agent-select');
+     const sortSelect = document.getElementById('sort-select');
+     
+     // Função para filtrar e ordenar
+     function updateList() {
+       const searchTerm = searchInput.value.toLowerCase();
+       const selectedFolder = folderSelect.value;
+       const sortMethod = sortSelect.value;
+       const passwordHeaders = document.querySelectorAll('.password-header');
+       
+       // Filtrar
+       let visibleCards = Array.from(passwordHeaders).filter(card => {
+         const name = card.dataset.name.toLowerCase();
+         const login = card.dataset.login.toLowerCase();
+         const folder = card.dataset.folder;
+         
+         const matchesSearch = name.includes(searchTerm) || login.includes(searchTerm);
+         const matchesFolder = !selectedFolder || folder === selectedFolder;
+         
+         return matchesSearch && matchesFolder;
+       });
+       
+       // Ordenar
+       visibleCards.sort((a, b) => {
+         switch(sortMethod) {
+           case 'name_asc': 
+             return a.dataset.name.localeCompare(b.dataset.name);
+           case 'name_desc': 
+             return b.dataset.name.localeCompare(a.dataset.name);
+           case 'folder_asc': 
+             return a.dataset.folder.localeCompare(b.dataset.folder);
+           case 'folder_desc': 
+             return b.dataset.folder.localeCompare(a.dataset.folder);
+           case 'strength': 
+             return (a.dataset.strength === 'safe' && b.dataset.strength !== 'safe') ? -1 : 
+                    (a.dataset.strength !== 'safe' && b.dataset.strength === 'safe') ? 1 : 0;
+           default: 
+             return 0;
+         }
+       });
+       
+       // Atualizar DOM
+       const listContainer = document.getElementById('passwords-list');
+       
+       // Esconder todos primeiro
+       passwordHeaders.forEach(card => {
+         card.style.display = 'none';
+       });
+       
+       // Mostrar apenas os filtrados/ordenados
+       visibleCards.forEach(card => {
+         card.style.display = ''; // Ou o display original que você usa
+         listContainer.appendChild(card); // Reorganiza no DOM
+       });
+     }
+     
+     // Event listeners
+     searchInput.addEventListener('input', updateList);
+     folderSelect.addEventListener('change', updateList);
+     sortSelect.addEventListener('change', updateList);
+     
+     // Inicializa a lista
+     updateList();
+   });
+</script>
+{% endblock %}
