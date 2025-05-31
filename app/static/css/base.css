@@ -34,6 +34,7 @@ body::-webkit-scrollbar {
    align-items: center;
 }
 
+
 .header-logo img{
    width: 65px;
    height: 60px;
@@ -62,6 +63,18 @@ body::-webkit-scrollbar {
 .header-menu a{
    text-decoration: none;
    color: rgb(96, 96, 233);
+}
+
+.header-menu .download{
+   color: #ffffff;
+   padding: 10px;
+   background-color: #40c74be5;
+   border-radius: 5px;
+   transition: 0.4s;
+}
+
+.header-menu .download:hover{
+   background-color:  #51e45de5;
 }
 
 /* NAV E SECTION */
@@ -117,14 +130,6 @@ body::-webkit-scrollbar {
    cursor: pointer;
    background-color:  #a0c4fac7;
    width: 89%;
-}
-
-.download{
-   background-color: #40c74be5;
-}
-
-.download:hover{
-   background-color:  #51e45de5;
 }
 
 .menu-content b{
