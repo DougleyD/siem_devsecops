@@ -1,0 +1,304 @@
+{% extends "application/base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/manage.css') }}">
+{% endblock %}
+
+{% block section %}
+<!-- Approved Agents Block -->
+<div class="title-line">
+   <div class="title-info">
+      <button class="title-bttn"><i class="fa-solid fa-circle-check"></i></button>
+      <div class="section-title">Agents Aprovados</div>
+   </div>
+</div>
+<div class="title-line">
+   <div class="title-info">
+      <div class="field-id">Identificação do Agent</div>
+      <div class="field-logs">Logs a serem coletados</div>
+      <div class="field-actions">Ações</div>
+   </div>
+</div>
+<div class="agent-container">
+   <div class="agent-line">
+      <div class="agent-info">
+         <div class="field-id">
+            <div>ID: 00100</div>
+            <div>Hostname: Daniel</div>
+            <div>IP: 192.168.31.134</div>
+            <div>Nota: 8.5</div>
+            <div>Aprovado em: 15/05/2023</div>
+         </div>
+         <div class="field-logs">
+            <div>◾ Recursos</div>
+            <div>◾ Sistema</div>
+            <div>◾ Autenticação</div>
+            <div>◾ Web</div>
+         </div>
+         <div class="field-actions">
+            <button class="action-bttn block">Bloquear</button>
+            <button class="action-bttn config">Configurar</button>
+         </div>
+      </div>
+   </div>
+   <div class="config-form" style="display: none;">
+      <form class="form-content">
+         <input type="text" placeholder="Definir nota" class="form-input">
+         <div class="checkboxes">
+            <label><input type="checkbox" checked> Recursos</label>
+            <label><input type="checkbox" checked> Sistema</label>
+            <label><input type="checkbox" checked> Autenticação</label>
+            <label><input type="checkbox" checked> Web</label>
+         </div>
+         <div class="form-buttons">
+            <button type="button" class="form-btn save">Salvar</button>
+            <button type="button" class="form-btn cancel">Cancelar</button>
+         </div>
+      </form>
+   </div>
+   <div class="agent-line">
+      <div class="agent-info">
+         <div class="field-id">
+            <div>ID: 00100</div>
+            <div>Hostname: Daniel</div>
+            <div>IP: 192.168.31.134</div>
+            <div>Nota: 8.5</div>
+            <div>Aprovado em: 15/05/2023</div>
+         </div>
+         <div class="field-logs">
+            <div>◾ Recursos</div>
+            <div>◾ Sistema</div>
+            <div>◾ Autenticação</div>
+            <div>◾ Web</div>
+         </div>
+         <div class="field-actions">
+            <button class="action-bttn block">Bloquear</button>
+            <button class="action-bttn config">Configurar</button>
+         </div>
+      </div>
+   </div>
+   <div class="config-form" style="display: none;">
+      <form class="form-content">
+         <input type="text" placeholder="Definir nota" class="form-input">
+         <div class="checkboxes">
+            <label><input type="checkbox" checked> Recursos</label>
+            <label><input type="checkbox" checked> Sistema</label>
+            <label><input type="checkbox" checked> Autenticação</label>
+            <label><input type="checkbox" checked> Web</label>
+         </div>
+         <div class="form-buttons">
+            <button type="button" class="form-btn save">Salvar</button>
+            <button type="button" class="form-btn cancel">Cancelar</button>
+         </div>
+      </form>
+   </div>
+   <div class="agent-line">
+      <div class="agent-info">
+         <div class="field-id">
+            <div>ID: 00100</div>
+            <div>Hostname: Daniel</div>
+            <div>IP: 192.168.31.134</div>
+            <div>Nota: 8.5</div>
+            <div>Aprovado em: 15/05/2023</div>
+         </div>
+         <div class="field-logs">
+            <div>◾ Recursos</div>
+            <div>◾ Sistema</div>
+            <div>◾ Autenticação</div>
+            <div>◾ Web</div>
+         </div>
+         <div class="field-actions">
+            <button class="action-bttn block">Bloquear</button>
+            <button class="action-bttn config">Configurar</button>
+         </div>
+      </div>
+   </div>
+   <div class="config-form" style="display: none;">
+      <form class="form-content">
+         <input type="text" placeholder="Definir nota" class="form-input">
+         <div class="checkboxes">
+            <label><input type="checkbox" checked> Recursos</label>
+            <label><input type="checkbox" checked> Sistema</label>
+            <label><input type="checkbox" checked> Autenticação</label>
+            <label><input type="checkbox" checked> Web</label>
+         </div>
+         <div class="form-buttons">
+            <button type="button" class="form-btn save">Salvar</button>
+            <button type="button" class="form-btn cancel">Cancelar</button>
+         </div>
+      </form>
+   </div>
+   <div class="agent-line">
+      <div class="agent-info">
+         <div class="field-id">
+            <div>ID: 00100</div>
+            <div>Hostname: Daniel</div>
+            <div>IP: 192.168.31.134</div>
+            <div>Nota: 8.5</div>
+            <div>Aprovado em: 15/05/2023</div>
+         </div>
+         <div class="field-logs">
+            <div>◾ Recursos</div>
+            <div>◾ Sistema</div>
+            <div>◾ Autenticação</div>
+            <div>◾ Web</div>
+         </div>
+         <div class="field-actions">
+            <button class="action-bttn block">Bloquear</button>
+            <button class="action-bttn config">Configurar</button>
+         </div>
+      </div>
+   </div>
+   <div class="config-form" style="display: none;">
+      <form class="form-content">
+         <input type="text" placeholder="Definir nota" class="form-input">
+         <div class="checkboxes">
+            <label><input type="checkbox" checked> Recursos</label>
+            <label><input type="checkbox" checked> Sistema</label>
+            <label><input type="checkbox" checked> Autenticação</label>
+            <label><input type="checkbox" checked> Web</label>
+         </div>
+         <div class="form-buttons">
+            <button type="button" class="form-btn save">Salvar</button>
+            <button type="button" class="form-btn cancel">Cancelar</button>
+         </div>
+      </form>
+   </div>
+</div>
+
+<!-- Pending Agents Block -->
+<div class="title-line">
+   <div class="title-info">
+      <button class="title-bttn"><i class="fa-solid fa-circle-exclamation"></i></button>
+      <div class="section-title">Agents Pendentes</div>
+   </div>
+</div>
+<div class="title-line">
+   <div class="title-info">
+      <div class="field-id">Identificação do Agent</div>
+      <div class="field-logs">Logs a serem coletados</div>
+      <div class="field-actions">Ações</div>
+   </div>
+</div>
+<div class="agent-container">
+   <div class="agent-line">
+      <div class="agent-info">
+         <div class="field-id">
+            <div>ID: 00200</div>
+            <div>Hostname: Server02</div>
+            <div>IP: 192.168.31.155</div>
+            <div>Nota: -</div>
+            <div>Registrado em: 28/05/2023</div>
+         </div>
+         <div class="field-logs">
+            <div>◾ Recursos</div>
+            <div>◾ Sistema</div>
+            <div>◾ Autenticação</div>
+            <div>◾ Web</div>
+         </div>
+         <div class="field-actions">
+            <button class="action-bttn delete">Excluir</button>
+            <button class="action-bttn approve">Aprovar</button>
+         </div>
+      </div>
+   </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Handle all configuration buttons
+  document.querySelectorAll('.action-bttn.config').forEach(configBtn => {
+    configBtn.addEventListener('click', function() {
+      const agentLine = this.closest('.agent-line');
+      const configForm = agentLine.nextElementSibling;
+      
+      // Close all other open forms first
+      document.querySelectorAll('.config-form').forEach(form => {
+        if (form !== configForm) {
+          form.style.display = 'none';
+          // Reset other config buttons
+          form.previousElementSibling.querySelector('.action-bttn.config').textContent = 'Configurar';
+        }
+      });
+      
+      // Toggle current form
+      const isVisible = configForm.style.display === 'block';
+      configForm.style.display = isVisible ? 'none' : 'block';
+      this.textContent = isVisible ? 'Configurar' : 'Fechar';
+    });
+  });
+
+  // Handle Cancel buttons
+  document.querySelectorAll('.form-btn.cancel').forEach(cancelBtn => {
+    cancelBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const configForm = this.closest('.config-form');
+      configForm.style.display = 'none';
+      // Reset the config button text
+      configForm.previousElementSibling.querySelector('.action-bttn.config').textContent = 'Configurar';
+    });
+  });
+
+  // Handle Save buttons
+  document.querySelectorAll('.form-btn.save').forEach(saveBtn => {
+    saveBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const configForm = this.closest('.config-form');
+      const agentLine = configForm.previousElementSibling;
+      const agentId = agentLine.querySelector('.field-id div:first-child').textContent.split(': ')[1];
+      
+      // Collect form data
+      const formData = {
+        agentId: agentId,
+        nota: configForm.querySelector('.form-input').value,
+        logs: {
+          recursos: configForm.querySelector('.checkboxes input:nth-child(1)').checked,
+          sistema: configForm.querySelector('.checkboxes input:nth-child(2)').checked,
+          autenticacao: configForm.querySelector('.checkboxes input:nth-child(3)').checked,
+          web: configForm.querySelector('.checkboxes input:nth-child(4)').checked
+        }
+      };
+      
+      // Here you would typically send the data to the server
+      console.log('Saving configuration for agent:', formData);
+      
+      // Update the UI with new values
+      const notaField = agentLine.querySelector('.field-id div:nth-child(4)');
+      if (formData.nota) {
+        notaField.textContent = `Nota: ${formData.nota}`;
+      }
+      
+      // Update logs display
+      const logsContainer = agentLine.querySelector('.field-logs');
+      logsContainer.innerHTML = '';
+      if (formData.logs.recursos) logsContainer.innerHTML += '<div>◾ Recursos</div>';
+      if (formData.logs.sistema) logsContainer.innerHTML += '<div>◾ Sistema</div>';
+      if (formData.logs.autenticacao) logsContainer.innerHTML += '<div>◾ Autenticação</div>';
+      if (formData.logs.web) logsContainer.innerHTML += '<div>◾ Web</div>';
+      
+      // Close the form
+      configForm.style.display = 'none';
+      configForm.previousElementSibling.querySelector('.action-bttn.config').textContent = 'Configurar';
+      
+      // Show success message
+      alert(`Configurações salvas para o agent ${agentId}`);
+    });
+  });
+
+  // Handle Block buttons
+  document.querySelectorAll('.action-bttn.block').forEach(blockBtn => {
+    blockBtn.addEventListener('click', function() {
+      const agentId = this.closest('.agent-line').querySelector('.field-id div:first-child').textContent.split(': ')[1];
+      if (confirm(`Tem certeza que deseja bloquear o agent ${agentId}?`)) {
+        // Here you would typically send block request to server
+        console.log('Blocking agent:', agentId);
+        this.closest('.agent-line').style.opacity = '0.5';
+        this.disabled = true;
+      }
+    });
+  });
+});
+</script>
+{% endblock %}

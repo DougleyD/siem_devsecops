@@ -32,3 +32,8 @@ def download(user):
     except Exception as e:
         current_app.logger.error(f"Erro ao fazer download: {str(e)}")
         return redirect(url_for('view.error_page'))
+    
+@view_bp.route('/manage', methods=['GET'])
+@login_required
+def manage(user):
+   return render_template('application/manage.html', title='EventTrace | Manage Agent', user=user)
