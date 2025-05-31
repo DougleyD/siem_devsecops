@@ -119,6 +119,14 @@ body::-webkit-scrollbar {
    width: 89%;
 }
 
+.download{
+   background-color: #40c74be5;
+}
+
+.download:hover{
+   background-color:  #51e45de5;
+}
+
 .menu-content b{
    color: #ffffff;
    font-size: 14px;
