@@ -37,3 +37,8 @@ def download(user):
 @login_required
 def manage(user):
    return render_template('application/manage.html', title='EventTrace | Manage Agent', user=user)
+
+@view_bp.route('/notification', methods=['GET'])
+@login_required
+def notification(user):
+   return render_template('application/notification.html', title='EventTrace | Notification Event', user=user)
