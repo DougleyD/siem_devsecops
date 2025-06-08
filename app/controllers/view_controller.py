@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_file, current_app
+from app.models.agent import Agent
 from app.models.triggers import Trigger
 from app.models.webhooks import Webhook
 from app.services.auth_service import admin_required, login_required
@@ -42,15 +43,47 @@ def download(user):
         current_app.logger.error(f"Erro ao fazer download: {str(e)}")
         return redirect(url_for('view.error_page'))
     
-@view_bp.route('/manage', methods=['GET'])
+@view_bp.route('/manage', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def manage(user):
     if 'authenticated' not in session:
-      flash('Por favor, faça login para acessar esta página', 'error')
-      return redirect(url_for('auth.login'))
-  
-    return render_template('application/manage.html', title='EventTrace | Manage Agent', user=user)
+        flash('Por favor, faça login para acessar esta página', 'error')
+        return redirect(url_for('auth.login'))
+    
+    if request.method == 'POST':
+        # Processar o formulário de configuração
+        agent_id = request.form.get('agent_id')
+        nota = request.form.get('nota')
+        collect_resources = 'collect_resources' in request.form
+        collect_system = 'collect_system' in request.form
+        collect_auth = 'collect_auth' in request.form
+        collect_web = 'collect_web' in request.form
+        
+        agent = Agent.query.get(agent_id)
+        if agent:
+            if nota:
+                agent.notes = nota
+            agent.collect_resources = collect_resources
+            agent.collect_system = collect_system
+            agent.collect_auth = collect_auth
+            agent.collect_web = collect_web
+            db.session.commit()
+            flash('Configurações do agent atualizadas com sucesso!', 'success')
+        else:
+            flash('Agent não encontrado!', 'error')
+        
+        return redirect(url_for('view.manage'))
+    
+    # Buscar agents aprovados e pendentes
+    approved_agents = Agent.query.filter_by(is_approved=True).all()
+    pending_agents = Agent.query.filter_by(is_approved=False).all()
+    
+    return render_template('application/manage.html', 
+                         title='EventTrace | Manage Agent', 
+                         user=user,
+                         approved_agents=approved_agents,
+                         pending_agents=pending_agents)
 
 @view_bp.route('/notification', methods=['GET'])
 @login_required
