@@ -19,22 +19,22 @@
       <div class="field-actions">Ações</div>
    </div>
 </div>
+
+{% for agent in approved_agents %}
 <div class="agent-container">
    <div class="agent-line">
       <div class="agent-info">
          <div class="field-id">
-            <div>ID: 00100</div>
-            <div>Hostname: Daniel</div>
-            <div>IP: 192.168.31.134</div>
-            <div>Nota: 8.5</div>
-            <div>Aprovado em: 15/05/2023</div>
-            <div>Status: Down</div>
+            <div>ID: {{ agent.id }}</div>
+            <div>Nota: {{ agent.notes if agent.notes else '-' }}</div>
+            <div>Aprovado em: {{ agent.approval_timestamp.strftime('%d/%m/%Y') if agent.approval_timestamp else '-' }}</div>
+            <div>Status: {{ 'Up' if agent.status == 'up' else 'Down' }}</div>
          </div>
          <div class="field-logs">
-            <div>◾ Recursos</div>
-            <div>◾ Sistema</div>
-            <div>◾ Autenticação</div>
-            <div>◾ Web</div>
+            {% if agent.collect_resources %}<div>◾ Recursos</div>{% endif %}
+            {% if agent.collect_system %}<div>◾ Sistema</div>{% endif %}
+            {% if agent.collect_auth %}<div>◾ Autenticação</div>{% endif %}
+            {% if agent.collect_web %}<div>◾ Web</div>{% endif %}
          </div>
          <div class="field-actions">
             <button class="action-bttn block">Bloquear</button>
@@ -43,59 +43,23 @@
       </div>
    </div>
    <div class="config-form" style="display: none;">
-      <form class="form-content">
-         <input type="text" placeholder="Definir nota" class="form-input">
+      <form class="form-content" action="{{ url_for('view.manage') }}" method="POST">
+         <input type="hidden" name="agent_id" value="{{ agent.id }}">
+         <input type="text" name="nota" placeholder="Definir nota" class="form-input" value="{{ agent.notes if agent.notes }}">
          <div class="checkboxes">
-            <label><input type="checkbox" checked> Recursos</label>
-            <label><input type="checkbox" checked> Sistema</label>
-            <label><input type="checkbox" checked> Autenticação</label>
-            <label><input type="checkbox" checked> Web</label>
+            <label><input type="checkbox" name="collect_resources" {% if agent.collect_resources %}checked{% endif %}> Recursos</label>
+            <label><input type="checkbox" name="collect_system" {% if agent.collect_system %}checked{% endif %}> Sistema</label>
+            <label><input type="checkbox" name="collect_auth" {% if agent.collect_auth %}checked{% endif %}> Autenticação</label>
+            <label><input type="checkbox" name="collect_web" {% if agent.collect_web %}checked{% endif %}> Web</label>
          </div>
          <div class="form-buttons">
-            <button type="button" class="form-btn save">Salvar</button>
-            <button type="button" class="form-btn cancel">Cancelar</button>
-         </div>
-      </form>
-   </div>
-
-   <div class="agent-line">
-      <div class="agent-info">
-         <div class="field-id">
-            <div>ID: 00100</div>
-            <div>Hostname: Daniel</div>
-            <div>IP: 192.168.31.134</div>
-            <div>Nota: 8.5</div>
-            <div>Aprovado em: 15/05/2023</div>
-            <div>Status: Up</div>
-         </div>
-         <div class="field-logs">
-            <div>◾ Recursos</div>
-            <div>◾ Sistema</div>
-            <div>◾ Autenticação</div>
-            <div>◾ Web</div>
-         </div>
-         <div class="field-actions">
-            <button class="action-bttn block">Bloquear</button>
-            <button class="action-bttn config">Configurar</button>
-         </div>
-      </div>
-   </div>
-   <div class="config-form" style="display: none;">
-      <form class="form-content">
-         <input type="text" placeholder="Definir nota" class="form-input">
-         <div class="checkboxes">
-            <label><input type="checkbox" checked> Recursos</label>
-            <label><input type="checkbox" checked> Sistema</label>
-            <label><input type="checkbox" checked> Autenticação</label>
-            <label><input type="checkbox" checked> Web</label>
-         </div>
-         <div class="form-buttons">
-            <button type="button" class="form-btn save">Salvar</button>
+            <button type="submit" class="form-btn save">Salvar</button>
             <button type="button" class="form-btn cancel">Cancelar</button>
          </div>
       </form>
    </div>
 </div>
+{% endfor %}
 
 <!-- Pending Agents Block -->
 <div class="title-line">
@@ -111,21 +75,21 @@
       <div class="field-actions">Ações</div>
    </div>
 </div>
+
+{% for agent in pending_agents %}
 <div class="agent-container">
    <div class="agent-line">
       <div class="agent-info">
          <div class="field-id">
-            <div>ID: 00200</div>
-            <div>Hostname: Server02</div>
-            <div>IP: 192.168.31.155</div>
-            <div>Nota: -</div>
-            <div>Registrado em: 28/05/2023</div>
+            <div>ID: {{ agent.id }}</div>
+            <div>Nota: {{ agent.notes if agent.notes else '-' }}</div>
+            <div>Registrado em: {{ agent.created_at.strftime('%d/%m/%Y') }}</div>
          </div>
          <div class="field-logs">
-            <div>◾ Recursos</div>
-            <div>◾ Sistema</div>
-            <div>◾ Autenticação</div>
-            <div>◾ Web</div>
+            {% if agent.collect_resources %}<div>◾ Recursos</div>{% endif %}
+            {% if agent.collect_system %}<div>◾ Sistema</div>{% endif %}
+            {% if agent.collect_auth %}<div>◾ Autenticação</div>{% endif %}
+            {% if agent.collect_web %}<div>◾ Web</div>{% endif %}
          </div>
          <div class="field-actions">
             <button class="action-bttn delete">Excluir</button>
@@ -134,6 +98,7 @@
       </div>
    </div>
 </div>
+{% endfor %}
 {% endblock %}
 
 {% block script %}
@@ -169,52 +134,6 @@ document.addEventListener('DOMContentLoaded', function() {
       configForm.style.display = 'none';
       // Reset the config button text
       configForm.previousElementSibling.querySelector('.action-bttn.config').textContent = 'Configurar';
-    });
-  });
-
-  // Handle Save buttons
-  document.querySelectorAll('.form-btn.save').forEach(saveBtn => {
-    saveBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      const configForm = this.closest('.config-form');
-      const agentLine = configForm.previousElementSibling;
-      const agentId = agentLine.querySelector('.field-id div:first-child').textContent.split(': ')[1];
-      
-      // Collect form data
-      const formData = {
-        agentId: agentId,
-        nota: configForm.querySelector('.form-input').value,
-        logs: {
-          recursos: configForm.querySelector('.checkboxes input:nth-child(1)').checked,
-          sistema: configForm.querySelector('.checkboxes input:nth-child(2)').checked,
-          autenticacao: configForm.querySelector('.checkboxes input:nth-child(3)').checked,
-          web: configForm.querySelector('.checkboxes input:nth-child(4)').checked
-        }
-      };
-      
-      // Here you would typically send the data to the server
-      console.log('Saving configuration for agent:', formData);
-      
-      // Update the UI with new values
-      const notaField = agentLine.querySelector('.field-id div:nth-child(4)');
-      if (formData.nota) {
-        notaField.textContent = `Nota: ${formData.nota}`;
-      }
-      
-      // Update logs display
-      const logsContainer = agentLine.querySelector('.field-logs');
-      logsContainer.innerHTML = '';
-      if (formData.logs.recursos) logsContainer.innerHTML += '<div>◾ Recursos</div>';
-      if (formData.logs.sistema) logsContainer.innerHTML += '<div>◾ Sistema</div>';
-      if (formData.logs.autenticacao) logsContainer.innerHTML += '<div>◾ Autenticação</div>';
-      if (formData.logs.web) logsContainer.innerHTML += '<div>◾ Web</div>';
-      
-      // Close the form
-      configForm.style.display = 'none';
-      configForm.previousElementSibling.querySelector('.action-bttn.config').textContent = 'Configurar';
-      
-      // Show success message
-      alert(`Configurações salvas para o agent ${agentId}`);
     });
   });
 
