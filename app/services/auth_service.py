@@ -9,7 +9,7 @@ def login_required(f):
         if 'session_token' not in session:
             flash('Por favor, faça login para acessar esta página', 'error')
             return redirect(url_for('auth.login'))
-        
+
         user = User.verify_session_token(session['session_token'])
         if not user:
             flash('Sessão expirada. Faça login novamente', 'error')
@@ -22,7 +22,6 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(user, *args, **kwargs):
         if not user.is_admin:
-            flash('Acesso negado: você não tem permissões de administrador', 'error')
             return redirect(url_for('main.dashboard'))
         return f(user, *args, **kwargs)
     return decorated_function

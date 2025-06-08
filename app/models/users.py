@@ -6,6 +6,7 @@ import secrets
 from datetime import timedelta
 
 class User(db.Model):
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -26,7 +27,7 @@ class User(db.Model):
     def generate_session_token(self):
         """Gera um token de sessão seguro e define a expiração"""
         self.session_token = secrets.token_urlsafe(32)
-        self.session_expiration = datetime.utcnow() + timedelta(minutes=60)
+        self.session_expiration = datetime.utcnow() + timedelta(minutes=120)
         db.session.commit()
         return self.session_token
 

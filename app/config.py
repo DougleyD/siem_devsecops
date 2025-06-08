@@ -13,3 +13,4 @@ class Config:
     MAIL_PORT = int(os.getenv('EMAIL_PORT', 465))  # Converte para int com valor padrão
     MAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', 'True').lower() in ['true', '1', 't']
     MAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'False').lower() in ['true', '1', 't']
+

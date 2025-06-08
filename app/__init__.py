@@ -23,7 +23,4 @@ def start_app(config_class=Config):
    app.register_blueprint(auth_bp)
    app.register_blueprint(view_bp)
    
-#   from app.middlewares.auth_middleware import setup_auth_middleware
-#   setup_auth_middleware(app)
-   
    return app

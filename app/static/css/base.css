@@ -167,3 +167,15 @@ footer {
    margin-top: auto;
    box-shadow: 0 0 6px 4px rgba(0, 0, 0, 0.1);
 }
+
+.alert-message.error {
+  background-color: #f5d1d7;
+  color: #c62828;
+  margin-right: 50px;
+}
+
+.alert-message.success {
+  background-color: #d1f5df;
+  color: #2e7d32;
+   margin-right: 50px;
+}

@@ -11,6 +11,17 @@
     <div class="title-info">
       <button class="title-bttn"><i class="fa-solid fa-bell"></i></button>
       <div class="section-title">Webhook Canal Teams</div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            {% if 'webhook_' in category %}
+              <div class="alert-message {{ category|replace('webhook_', '') }}">
+                {{ message }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
       <button class="add-webhook-bttn" id="addWebhookBtn">
         <i class="fa-solid fa-plus"></i> Adicionar webhook
       </button>
@@ -19,210 +30,233 @@
 
   <!-- Hidden Webhook Form -->
   <div class="webhook-form-container" id="webhookFormContainer" style="display: none;">
-    <form class="webhook-form">
+    <form class="webhook-form" method="POST" action="{{ url_for('view.handle_webhook') }}">
       <!-- First Row: Name, Expiration, Author -->
       <div class="form-row">
         <div class="form-group">
-          <input type="text" id="webhookName" placeholder="Nome do webhook" required>
+          <input type="text" name="name" placeholder="Nome do webhook" required>
         </div>
         <div class="form-group">
-          <input type="date" id="expirationDate" placeholder="Data de expiração">
+          <input type="date" name="expiration_date" placeholder="Data de expiração">
         </div>
         <div class="form-group">
-          <input type="text" id="createdBy" placeholder="Autor que criou" value="Administrador" readonly>
+          <input type="text" value="{{ user.email }}" readonly>
         </div>
       </div>
-      
+
       <!-- Second Row: URL and Actions -->
       <div class="form-row">
         <div class="form-group url-group">
-          <input type="url" id="webhookUrl" placeholder="URL completa do webhook" required>
+          <input type="url" name="url" placeholder="URL completa do webhook" required>
         </div>
         <div class="form-actions">
           <button type="button" class="form-btn cancel" id="cancelWebhookBtn">Cancelar</button>
           <button type="submit" class="form-btn save">Salvar</button>
         </div>
       </div>
+
     </form>
   </div>
-
-  <!-- Rest of your existing content remains the same -->
-  <!-- Existing Webhooks List -->
+  {% for webhook in webhooks %}
   <div class="webhooks-list" id="webhooksList">
-    <!-- Webhooks will be listed here dynamically -->
-  </div>
 
+    <form class="webhook-form" method="POST" action="{{ url_for('view.handle_webhook') }}">
+      <input type="hidden" name="delete_id" value="{{ webhook.id }}">
+      <div class="form-row">
+        <div class="form-group">
+          <p>{{ webhook.name }}</p>
+        </div>
+        <div class="form-group">
+          <p>Expiração: {{ webhook.expiration_date.strftime('%d/%m/%Y') if webhook.expiration_date else 'N/A' }}</p>
+        </div>
+        <div class="form-group">
+          <p>Autor: {{ user.username }}</p>
+        </div>
+        <button type="submit" class="form-btn delete">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
+    </form>
+
+  </div>
+  {% endfor %}
   <!-- Triggers Section -->
-
   <div class="trigger-config">
-  <div class="title-line">
-    <div class="title-info">
-      <button class="title-bttn"><i class="fa-solid fa-bolt"></i></button>
-      <div class="section-title">Configuração de Triggers</div>
-      <button class="add-trigger-bttn" id="addTriggerBtn">
-        <i class="fa-solid fa-plus"></i> Criar Trigger
-      </button>
+    <div class="title-line">
+      <div class="title-info">
+        <button class="title-bttn"><i class="fa-solid fa-bolt"></i></button>
+        <div class="section-title">Configuração de Triggers</div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              {% if 'trigger_' in category %}
+                <div class="alert-message {{ category|replace('trigger_', '') }}">
+                  {{ message }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <button class="add-trigger-bttn" id="addTriggerBtn">
+          <i class="fa-solid fa-plus"></i> Criar Trigger
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- Hidden Trigger Form -->
-  <div class="trigger-form-container" id="triggerFormContainer" style="display: none;">
-    <div class="trigger-form">
-      <div class="form-columns">
-        <!-- Alert Types Column -->
-        <div class="alert-types">
-          <div class="alert-options">
-            <label class="alert-option">
-              <input type="checkbox" name="alertType" value="icmp_failure">
-              <span class="alert-title">Indisponibilidade</span>
-              <span class="alert-description">ICMP ping failed</span>
-            </label>
-            
-            <label class="alert-option">
-              <input type="checkbox" name="alertType" value="auth_failure">
-              <span class="alert-title">Falha de Autenticação</span>
-              <span class="alert-description">SSH failed authentication (5 attempts in 2min)</span>
-            </label>
-            
-            <label class="alert-option">
-              <input type="checkbox" name="alertType" value="priv_escalation">
-              <span class="alert-title">Elevação de Privilégio</span>
-              <span class="alert-description">sudo command detected</span>
-            </label>
-            
-            <label class="alert-option">
-              <input type="checkbox" name="alertType" value="port_scan">
-              <span class="alert-title">Varredura de Portas</span>
-              <span class="alert-description">Multiple port connection attempts</span>
-            </label>
-            
-            <label class="alert-option">
-              <input type="checkbox" name="alertType" value="bruteforce">
-              <span class="alert-title">Ataque de Força Bruta</span>
-              <span class="alert-description">Multiple failed login attempts</span>
-            </label>
-            
-            <label class="alert-option">
-              <input type="checkbox" name="alertType" value="config_change">
-              <span class="alert-title">Mudança de Configuração</span>
-              <span class="alert-description">Critical system files modified</span>
-            </label>
+    <!-- Hidden Trigger Form -->
+    <div class="trigger-form-container" id="triggerFormContainer" style="display: none;">
+      <form class="trigger-form" method="POST" action="{{ url_for('view.handle_trigger') }}">
+        <div class="form-columns">
+          <!-- Alert Types Column -->
+          <div class="alert-types">
+            <div class="alert-options">
+              <label class="alert-option">
+                <input type="checkbox" name="alert_type" value="icmp_failure">
+                <span class="alert-title">Indisponibilidade</span>
+                <span class="alert-description">ICMP ping failed</span>
+              </label>
+
+              <label class="alert-option">
+                <input type="checkbox" name="alert_type" value="auth_failure">
+                <span class="alert-title">Falha de Autenticação</span>
+                <span class="alert-description">SSH failed authentication (5 attempts in 2min)</span>
+              </label>
+
+              <label class="alert-option">
+                <input type="checkbox" name="alert_type" value="priv_escalation">
+                <span class="alert-title">Elevação de Privilégio</span>
+                <span class="alert-description">sudo command detected</span>
+              </label>
+
+              <label class="alert-option">
+                <input type="checkbox" name="alert_type" value="port_scan">
+                <span class="alert-title">Varredura de Portas</span>
+                <span class="alert-description">Multiple port connection attempts</span>
+              </label>
+
+              <label class="alert-option">
+                <input type="checkbox" name="alert_type" value="bruteforce">
+                <span class="alert-title">Ataque de Força Bruta</span>
+                <span class="alert-description">Multiple failed login attempts</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Configuration Column -->
+          <div class="alert-config">
+            <div class="form-group">
+              <input type="text" name="target_hosts" placeholder="Hostname. Ex.: server1, server2, 192.168.1.*"
+                required>
+            </div>
+
+            <div class="form-group">
+              <select name="severity" required>
+                <option value="" disabled selected>Selecione a criticidade</option>
+                <option value="low">Baixa</option>
+                <option value="medium">Média</option>
+                <option value="high">Alta</option>
+                <option value="critical">Crítica</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <select name="webhook" required>
+                <option value="" disabled selected>Selecione o canal a ser transmitido</option>
+                {% for webhook in webhooks %}
+                  {% if webhook.is_expired %}
+                    <option value="{{ webhook.name }}" disabled title="Webhook vencido em {{ webhook.expiration_date.strftime('%d/%m/%Y') }}">
+                      {{ webhook.name }} (Vencido)
+                    </option>
+                  {% else %}
+                    <option value="{{ webhook.name }}">{{ webhook.name }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <textarea name="custom_message" placeholder="Mensagem personalizada para o alerta"></textarea>
+            </div>
           </div>
         </div>
 
-        <!-- Configuration Column -->
-         <div class="alert-config">
-         <div class="form-group">
-            <input type="text" id="targetHosts" placeholder="Hostname. Ex.: server1, server2, 192.168.1.*">
-         </div>
-         
-         <div class="form-group">
-            <select id="alertSeverity">
-               <option value="" disabled selected>Selecione a criticidade</option>
-               <option value="low">Baixa</option>
-               <option value="medium">Média</option>
-               <option value="high">Alta</option>
-               <option value="critical">Crítica</option>
-            </select>
-         </div>
-         
-         <div class="form-group">
-            <input type="text" id="alertTag" placeholder="Tags. Ex.: security, network, auth">
-         </div>
-         
-         <div class="form-group">
-            <textarea id="customMessage" placeholder="Mensagem personalizada para o alerta"></textarea>
-         </div>
-         </div>
-      </div>
-      
-      <div class="form-actions">
-        <button type="button" class="form-btn cancel" id="cancelTriggerBtn">Cancelar</button>
-        <button type="button" class="form-btn save">Salvar Trigger</button>
-      </div>
+        <div class="form-actions">
+          <button type="button" class="form-btn cancel" id="cancelTriggerBtn">Cancelar</button>
+          <button type="submit" class="form-btn save">Salvar Trigger</button>
+        </div>
+      </form>
     </div>
+    {% for trigger in triggers %}
+    <div class="triggers-list" id="triggersList">
+      <form class="webhook-form" method="POST" action="{{ url_for('view.handle_trigger') }}">
+        <input type="hidden" name="delete_trigger_id" value="{{ trigger.id }}">
+        <div class="form-row">
+          <div class="form-group">
+            <p class="category">
+              {% for alert_type in trigger.alert_types.split(',') %}
+                {{ alert_type|replace('_', ' ')|title }}{% if not loop.last %}, {% endif %}
+              {% endfor %}
+            </p>
+          </div>
+          <div class="form-group">
+            <p>Hosts: {{ trigger.target_hosts }}</p>
+          </div>
+          <div class="form-group">
+            <p class="severity {{ trigger.severity }}">Severity: {{ trigger.severity|capitalize }}</p>
+          </div>
+          <div class="form-group">
+            <p>Canal: {{ trigger.webhook_name }}
+              {% if trigger.webhook_rel.is_expired %}
+                <span class="expired-badge">(Vencido)</span>
+              {% endif %}
+            </p>
+          </div>
+          <div class="form-group">
+            <p>Message: {{ trigger.custom_message or 'N/A' }}</p>
+          </div>
+          <button type="submit" class="form-btn delete">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+    {% endfor %}
   </div>
-
-  <!-- Existing Triggers List -->
-  <div class="triggers-list" id="triggersList">
-    <!-- Triggers will be listed here dynamically -->
-  </div>
-</div>
 </div>
 {% endblock %}
 
 {% block script %}
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Webhook Form Toggle
-  const addWebhookBtn = document.getElementById('addWebhookBtn');
-  const webhookFormContainer = document.getElementById('webhookFormContainer');
-  const cancelWebhookBtn = document.getElementById('cancelWebhookBtn');
+  document.addEventListener('DOMContentLoaded', function () {
+    // Webhook Form Toggle
+    const addWebhookBtn = document.getElementById('addWebhookBtn');
+    const webhookFormContainer = document.getElementById('webhookFormContainer');
+    const cancelWebhookBtn = document.getElementById('cancelWebhookBtn');
 
-  addWebhookBtn.addEventListener('click', function() {
-    webhookFormContainer.style.display = 'block';
-  });
+    addWebhookBtn.addEventListener('click', function () {
+      webhookFormContainer.style.display = 'block';
+    });
 
-  cancelWebhookBtn.addEventListener('click', function() {
-    webhookFormContainer.style.display = 'none';
+    cancelWebhookBtn.addEventListener('click', function () {
+      webhookFormContainer.style.display = 'none';
+    });
   });
-
-  // Form submission would be handled here
-  document.querySelector('.webhook-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    // Handle form submission
-    alert('Webhook saved! (Implementation would go here)');
-    webhookFormContainer.style.display = 'none';
-  });
-});
 </script>
 
 <script>
-   document.addEventListener('DOMContentLoaded', function() {
-  // Trigger Form Toggle
-  const addTriggerBtn = document.getElementById('addTriggerBtn');
-  const triggerFormContainer = document.getElementById('triggerFormContainer');
-  const cancelTriggerBtn = document.getElementById('cancelTriggerBtn');
+  document.addEventListener('DOMContentLoaded', function () {
+    // Trigger Form Toggle
+    const addTriggerBtn = document.getElementById('addTriggerBtn');
+    const triggerFormContainer = document.getElementById('triggerFormContainer');
+    const cancelTriggerBtn = document.getElementById('cancelTriggerBtn');
 
-  addTriggerBtn.addEventListener('click', function() {
-    triggerFormContainer.style.display = 'block';
-  });
+    addTriggerBtn.addEventListener('click', function () {
+      triggerFormContainer.style.display = 'block';
+    });
 
-  cancelTriggerBtn.addEventListener('click', function() {
-    triggerFormContainer.style.display = 'none';
+    cancelTriggerBtn.addEventListener('click', function () {
+      triggerFormContainer.style.display = 'none';
+    });
   });
-
-  // Example of saving a trigger
-  document.querySelector('.trigger-form .form-btn.save').addEventListener('click', function() {
-    // Collect form data
-    const selectedAlerts = Array.from(document.querySelectorAll('input[name="alertType"]:checked')).map(el => el.value);
-    const targetHosts = document.getElementById('targetHosts').value;
-    const severity = document.getElementById('alertSeverity').value;
-    const tag = document.getElementById('alertTag').value;
-    const message = document.getElementById('customMessage').value;
-    
-    // Here you would save the trigger and update the UI
-    alert('Trigger saved! (Implementation would go here)');
-    triggerFormContainer.style.display = 'none';
-    
-    // Example of adding to triggers list
-    document.querySelector('.no-triggers').style.display = 'none';
-    const triggerList = document.getElementById('triggersList');
-    const newTrigger = document.createElement('div');
-    newTrigger.className = 'trigger-item';
-    newTrigger.innerHTML = `
-      <div class="trigger-header">
-        <span class="trigger-type">${selectedAlerts.join(', ')}</span>
-        <span class="trigger-severity ${severity}">${severity}</span>
-      </div>
-      <div class="trigger-details">
-        <span>Hosts: ${targetHosts}</span>
-        ${tag ? `<span>Tag: ${tag}</span>` : ''}
-      </div>
-    `;
-    triggerList.appendChild(newTrigger);
-  });
-});
 </script>
 {% endblock %}
-
