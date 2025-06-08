@@ -46,8 +46,16 @@
   background-color: #f8f9fa;
   border-radius: 3px;
   padding: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.webhooks-list{
+  background-color: #f8f9fa;
+  border-radius: 3px;
+  padding: 5px 20px;
+  margin-bottom: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
 }
 
 .webhook-form {
@@ -74,11 +82,11 @@
 .trigger-form select,
 .form-group input {
   width: 95%;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 14px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .form-group select {
@@ -115,6 +123,12 @@
   color: #555;
 }
 
+.form-btn.delete{
+  background-color: #f8f9fa;
+  color: #d14040;
+    font-size: 20px;
+}
+
 /* Trigger Configuration Styles */
 .trigger-config {
   margin-top: 30px;
@@ -138,7 +152,8 @@
   border-radius: 3px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
-   display: none;
+  margin-bottom: 10px;
+  display: none;
 }
 
 .form-columns {
@@ -192,7 +207,11 @@
 }
 
 .triggers-list {
-  margin-top: 20px;
+  background-color: #f8f9fa;
+  border-radius: 3px;
+  padding: 5px 20px;
+  margin-bottom: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); 
 }
 
 
@@ -240,3 +259,42 @@
    font-size: 24px;
 }
 
+.severity.critical{
+  color: #3111c0;
+  font-weight: bold;
+}
+
+.severity.high{
+  color: #f31c0d;
+  font-weight: bold;
+}
+
+.severity.medium{
+  color: #f3610d;
+  font-weight: bold;
+}
+
+.severity.low{
+  color: #eca92b;
+  font-weight: bold;
+}
+
+.category{
+  color: #0a970a;
+  font-weight: bold;
+}
+
+/* Adicione ao seu arquivo CSS */
+.expired-webhook {
+  opacity: 0.7;
+  border-left: 3px solid #ff5252;
+}
+
+.expired-badge {
+  color: #ff5252;
+  font-weight: bold;
+}
+
+select option:disabled {
+  color: #ff5252;
+}

@@ -12,7 +12,9 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
-
+    if 'authenticated' in session:
+        return redirect(url_for('main.dashboard'))
+    
     if request.method == 'POST':
         # Se for pedido de envio de código
         if 'send_code' in request.form:
@@ -99,6 +101,9 @@ def register():
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
+    if 'authenticated' in session:
+        return redirect(url_for('main.dashboard'))
+    
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
@@ -111,7 +116,6 @@ def login():
         # Gera token de sessão seguro (não usa o ID)
         session_token = user.generate_session_token()
         session['session_token'] = session_token
-        session['authenticated'] = False
         
         if not user.tfa_enabled:
             return redirect(url_for('auth.setup_mfa'))
@@ -134,6 +138,9 @@ def logout():
 @auth_bp.route('/setup_mfa', methods=['GET', 'POST'])
 @login_required
 def setup_mfa(user):
+    if 'authenticated' in session:
+        return redirect(url_for('main.dashboard'))
+    
     if request.method == 'POST':
         code = request.form.get('code')
         
@@ -141,6 +148,7 @@ def setup_mfa(user):
             user.tfa_enabled = True
             db.session.commit()
             flash('MFA configurado com sucesso!', 'success')
+            session['authenticated'] = True
             return redirect(url_for('main.dashboard'))
             
         flash('Código inválido', 'error')
@@ -159,25 +167,27 @@ def setup_mfa(user):
 @auth_bp.route('/verify_mfa', methods=['GET', 'POST'])
 @login_required
 def verify_mfa(user):
+    if 'authenticated' in session:
+        return redirect(url_for('main.dashboard'))
+    
     if request.method == 'POST':
         code = request.form.get('code')
         
         if MFAService.verify_code(user.tfa_secret, code):
             session['authenticated'] = True
-            return redirect(url_for('main.dashboard'))  # Ajuste para sua rota principal
+            return redirect(url_for('main.dashboard'))
             
         flash('Código inválido', 'error')
     
     return render_template('auth/verify_mfa.html', title='EventTrace | Verify MFA')
 
 
-@auth_bp.route('/refresh_mfa', methods=['POST'])
-def refresh_mfa():
-    if 'user_id' not in session:
-        return redirect(url_for('auth.login'))
-    
-    user = User.query.get(session['user_id'])
-    
+@auth_bp.route('/refresh_mfa', methods=['POST','GET'])
+@login_required
+def refresh_mfa(user):
+    if request.method == 'GET':
+        return redirect(url_for('auth.setup_mfa'))
+        
     # Gera novo segredo e atualiza a expiração
     user.tfa_secret = MFAService.generate_secret()
     user.tfa_expiration = MFAService.get_expiration_date()
@@ -188,6 +198,9 @@ def refresh_mfa():
 
 @auth_bp.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
+    if 'authenticated' in session:
+        return redirect(url_for('main.dashboard'))
+    
     if request.method == 'POST':
         # Se for pedido de envio de código
         if 'send_code' in request.form:
@@ -245,7 +258,9 @@ def forgot_password():
 
 @auth_bp.route('/update_password', methods=['GET', 'POST'])
 def update_password():
-
+    if 'authenticated' in session:
+        return redirect(url_for('main.dashboard'))
+    
     # Verifica se há um email na session (vindo do forgot_password)
     reset_email = session.get('reset_email')
     if not reset_email:
