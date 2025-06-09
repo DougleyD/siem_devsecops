@@ -1,0 +1,5 @@
+show dbs
+use siem
+use siem
+db.logs.insert({ teste: "verifica se foi" })
+use siem

@@ -1,0 +1,36 @@
+{% extends "auth/base.html" %}
+
+{% block form_type %}form-login{% endblock %}
+
+{% block description %}
+<div class="redirect-link">
+    <p>Ainda não possui conta? <a href="{{ url_for('auth.register')}}">Cadastre-se</a></p>
+</div>
+{% endblock %}
+
+{% block form %}
+<div class="form-input">
+    <form method="POST" action="{{ url_for('auth.login')}}">
+        <div class="input-field-data">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="text" name="email" id="email" placeholder="E-mail" value="{{ request.form.email if request.form else '' }}"" required/>
+        </div>
+        <div class="input-field-data">
+            <i class="fa-solid fa-key"></i>
+            <input type="password" name="password" id="password" placeholder="Senha" required/>
+        </div>
+        <div class="forgot-link">
+            <p><a href="{{ url_for('auth.forgot_password')}}">Esqueci minha senha</a></p>
+        </div>
+
+        <button class="bttn-login-data" type="submit">ENTRAR</button>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <span class="alert-message {{ category }}">{{ message }}</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </form>
+</div>
+{% endblock %}

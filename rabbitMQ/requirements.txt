@@ -1,0 +1,5 @@
+flask
+requests
+cryptography
+pika==1.3.2
+

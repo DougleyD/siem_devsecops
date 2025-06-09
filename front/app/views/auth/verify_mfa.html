@@ -1,0 +1,31 @@
+{% extends "auth/base.html" %}
+
+{% block form_type %}form-verify-tfa{% endblock %}
+
+{% block description %}
+<div class="info-user">
+    <strong><p>Autenticação em Duas Etapas</p></strong>
+    <p>Informe o código de seu aplicativo autenticador:</p>    
+</div>
+{% endblock %}
+
+{% block form %}
+<div class="form-input">
+    <form method="POST" action="{{ url_for('auth.verify_mfa')}}">
+        <div class="input-field-data">
+            <i class="fa-solid fa-shield-halved"></i>
+            <input type="text" name="code" id="code" placeholder="# Código" required/>
+        </div>
+        
+        <button class="bttn-tfa-data" type="submit">VERIFICAR</button>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <span class="alert-message {{ category }}">{{ message }}</span>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </form>
+</div>
+{% endblock %}
