@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siem-mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siem-mariadb
+  template:
+    metadata:
+      labels:
+        app: siem-mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: siem_mariadb:latest
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "Devsecops2025"
+        - name: MYSQL_DATABASE
+          value: "siem_dev"
+        - name: MYSQL_USER
+          value: "devsec"
+        - name: MYSQL_PASSWORD
+          value: "Devsecops2025"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: mariadb-data
+        - mountPath: /docker-entrypoint-initdb.d
+          name: mariadb-init
+      volumes:
+      - name: mariadb-data
+        persistentVolumeClaim:
+          claimName: mariadb-pvc
+      - name: mariadb-init
+        configMap:
+          name: mariadb-init-sql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: siem-mariadb
+spec:
+  selector:
+    app: siem-mariadb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+  clusterIP: None
+

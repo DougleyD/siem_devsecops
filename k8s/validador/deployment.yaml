@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siem-validador
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siem-validador
+  template:
+    metadata:
+      labels:
+        app: siem-validador
+    spec:
+      containers:
+      - name: siem-validador
+        image: siem_validador:latest
+        ports:
+        - containerPort: 5000

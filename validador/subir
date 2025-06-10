@@ -1,0 +1,16 @@
+docker rm -f siem_validador
+
+docker build -t siem_validador .
+
+docker run -d --name siem_validador \
+  --network net_siem_core \
+  --network-alias validador \
+  -e RABBITMQ_USER=devsec \
+  -e RABBITMQ_PASS=Devsec2025 \
+  -e RABBITMQ_HOST=rabbitmq \
+  -v "$(pwd)/logs:/app/logs" \
+  -v "$(pwd)/approved_agents.json:/app/approved_agents.json" \
+  -v "$(pwd)/pending_agents.json:/app/pending_agents.json" \
+  -p 5000:5000 \
+  siem_validador
+

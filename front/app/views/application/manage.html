@@ -1,0 +1,113 @@
+{% extends "application/base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/manage.css') }}">
+{% endblock %}
+
+{% block section %}
+<!-- Approved Agents Block -->
+<div class="title-line">
+   <div class="title-info">
+      <button class="title-bttn"><i class="fa-solid fa-circle-check"></i></button>
+      <div class="section-title">Agents Aprovados</div>
+   </div>
+</div>
+<div class="title-line">
+   <div class="title-info">
+      <div class="field-id">Identificação do Agent</div>
+      <div class="field-logs">Logs a serem coletados</div>
+      <div class="field-actions">Ações</div>
+   </div>
+</div>
+<div class="agent-container">
+  {% for agente in aprovados %}
+  <div class="agent-line">
+    <div class="agent-info">
+      <div class="field-id">
+        <div>ID: {{ agente.identificador_host }}</div>
+        <div>IP: {{ agente.ip_agente }}</div>
+        <div>Nota: -</div>
+        <div>Aprovado em: {{ agente.aprovado_em.strftime('%d/%m/%Y') if agente.aprovado_em else '-' }}</div>
+        <div>Status: -</div>
+      </div>
+      <div class="field-logs">
+        <div>◾ Recursos</div>
+        <div>◾ Sistema</div>
+        <div>◾ Autenticação</div>
+        <div>◾ Web</div>
+      </div>
+      <div class="field-actions">
+        <button class="action-bttn block">Bloquear</button>
+        <button class="action-bttn config">Configurar</button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Pending Agents Block -->
+<div class="title-line">
+   <div class="title-info">
+      <button class="title-bttn"><i class="fa-solid fa-circle-exclamation"></i></button>
+      <div class="section-title">Agents Pendentes</div>
+   </div>
+</div>
+<div class="title-line">
+   <div class="title-info">
+      <div class="field-id">Identificação do Agent</div>
+      <div class="field-logs">Logs a serem coletados</div>
+      <div class="field-actions">Ações</div>
+   </div>
+</div>
+<div class="agent-container">
+  {% for agente in pendentes %}
+  <div class="agent-line" data-host-id="{{ agente.identificador_host }}">
+    <div class="agent-info">
+      <div class="field-id">
+        <div>ID: {{ agente.identificador_host }}</div>
+        <div>IP: {{ agente.ip_agente }}</div>
+        <div>Nota: -</div>
+        <div>Registrado em: {{ agente.criado_em.strftime('%d/%m/%Y') if agente.criado_em else '-' }}</div>
+      </div>
+      <div class="field-logs">
+        <div>◾ Recursos</div>
+        <div>◾ Sistema</div>
+        <div>◾ Autenticação</div>
+        <div>◾ Web</div>
+      </div>
+      <div class="field-actions">
+        <button class="action-bttn delete" onclick="rejeitarAgente('{{ agente.identificador_host }}')">Excluir</button>
+        <button class="action-bttn approve" onclick="aprovarAgente('{{ agente.identificador_host }}')">Aprovar</button>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+function aprovarAgente(hostId) {
+  fetch("/autorizar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ host_id: hostId })
+  }).then(res => res.json()).then(data => {
+    alert(data.status || data.error);
+    location.reload();
+  });
+}
+
+function rejeitarAgente(hostId) {
+  if (!confirm("Tem certeza que deseja excluir este agente?")) return;
+  fetch("/rejeitar", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ host_id: hostId })
+  }).then(res => res.json()).then(data => {
+    alert(data.status || data.error);
+    location.reload();
+  });
+}
+</script>
+{% endblock %}

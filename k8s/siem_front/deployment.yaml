@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: siem-front
+tags:
+  - siem
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siem-front
+  template:
+    metadata:
+      labels:
+        app: siem-front
+    spec:
+      containers:
+      - name: siem-front
+        image: siem_front:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
