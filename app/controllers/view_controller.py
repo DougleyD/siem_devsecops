@@ -12,9 +12,101 @@ view_bp = Blueprint('view', __name__)
 @login_required
 def events(user):
     if 'authenticated' not in session:
-      flash('Por favor, faça login para acessar esta página', 'error')
-      return redirect(url_for('auth.login'))
-    return render_template('application/events.html', title='EventTrace | Event View', user=user)
+        flash('Por favor, faça login para acessar esta página', 'error')
+        return redirect(url_for('auth.login'))
+    
+    # Static event data
+    events_data = [
+        {
+            "timestamp": "2023-05-15 14:30:22",
+            "event_id": "1495",
+            "agent_id": "00100",
+            "hostname": "Daniel",
+            "ip": "192.168.31.134",
+            "description": "Authentication failure",
+            "category": "SSH failed",
+            "details": {
+                "user": "daniel",
+                "file_directory": "/home/daniel/Documents",
+                "service": "SSH",
+                "port": 22,
+                "directory": "N/A",
+                "authentication": "Failed (3 attempts)",
+                "web": "N/A"
+            },
+            "json_data": {
+                "event": {
+                    "timestamp": "2023-05-15T14:30:22Z",
+                    "id": 1495,
+                    "type": "authentication",
+                    "outcome": "failure"
+                },
+                "agent": {
+                    "id": "00100",
+                    "hostname": "Daniel",
+                    "ip": "192.168.31.134"
+                },
+                "details": {
+                    "user": "daniel",
+                    "directory": "/home/daniel/Documents",
+                    "service": "SSH",
+                    "port": 22,
+                    "authentication": {
+                        "status": "failed",
+                        "attempts": 3
+                    }
+                }
+            }
+        },
+        {
+            "timestamp": "2023-05-15 15:45:10",
+            "event_id": "1496",
+            "agent_id": "00101",
+            "hostname": "Server01",
+            "ip": "192.168.31.135",
+            "description": "Unauthorized access attempt",
+            "category": "Security",
+            "details": {
+                "user": "root",
+                "file_directory": "/var/log",
+                "service": "FTP",
+                "port": 21,
+                "directory": "/var/www",
+                "authentication": "Failed (1 attempt)",
+                "web": "N/A"
+            },
+            "json_data": {
+                "event": {
+                    "timestamp": "2023-05-15T15:45:10Z",
+                    "id": 1496,
+                    "type": "access",
+                    "outcome": "failure"
+                },
+                "agent": {
+                    "id": "00101",
+                    "hostname": "Server01",
+                    "ip": "192.168.31.135"
+                },
+                "details": {
+                    "user": "root",
+                    "directory": "/var/log",
+                    "service": "FTP",
+                    "port": 21,
+                    "authentication": {
+                        "status": "failed",
+                        "attempts": 1
+                    }
+                }
+            }
+        }
+    ]
+    
+    return render_template(
+        'application/events.html',
+        title='EventTrace | Event View',
+        user=user,
+        events=events_data
+    )
 
 @view_bp.route('/download', methods=['GET'])
 @login_required
@@ -25,7 +117,7 @@ def download(user):
   
     try:
         # Caminho para o arquivo que será disponibilizado para download
-        file_path = os.path.join(current_app.root_path, 'static', 'agent', 'agent.py')
+        file_path = os.path.join(current_app.root_path, 'static', 'download', 'agent.py')
         
         # Verifica se o arquivo existe
         if not os.path.exists(file_path):
@@ -42,89 +134,6 @@ def download(user):
         current_app.logger.error(f"Erro ao fazer download: {str(e)}")
         return redirect(url_for('view.error_page'))
     
-@view_bp.route('/manage', methods=['GET', 'POST'])
-@login_required
-@admin_required
-def manage(user):
-    if 'authenticated' not in session:
-        flash('Por favor, faça login para acessar esta página', 'error')
-        return redirect(url_for('auth.login'))
-    
-    # Dados mockados para exemplo (substitua por seus dados reais)
-    approved_agents = [
-        {
-            'id': '00100',
-            'notes': '8.5',
-            'approval_timestamp': datetime(2023, 5, 15),
-            'status': 'down',
-            'collect_resources': True,
-            'collect_system': True,
-            'collect_auth': True,
-            'collect_web': True
-        },
-        {
-            'id': '00101',
-            'notes': '7.2',
-            'approval_timestamp': datetime(2023, 6, 1),
-            'status': 'up',
-            'collect_resources': True,
-            'collect_system': False,
-            'collect_auth': True,
-            'collect_web': False
-        }
-    ]
-    
-    pending_agents = [
-        {
-            'id': '00200',
-            'notes': None,
-            'created_at': datetime(2023, 5, 28),
-            'collect_resources': True,
-            'collect_system': True,
-            'collect_auth': False,
-            'collect_web': True
-        },
-        {
-            'id': '00201',
-            'notes': None,
-            'created_at': datetime(2023, 6, 10),
-            'collect_resources': False,
-            'collect_system': True,
-            'collect_auth': True,
-            'collect_web': False
-        }
-    ]
-    
-    if request.method == 'POST':
-        # Processar o formulário de configuração
-        agent_id = request.form.get('agent_id')
-        nota = request.form.get('nota')
-        collect_resources = 'collect_resources' in request.form
-        collect_system = 'collect_system' in request.form
-        collect_auth = 'collect_auth' in request.form
-        collect_web = 'collect_web' in request.form
-        
-        # Atualizar os dados mockados (simulando banco de dados)
-        for agent in approved_agents + pending_agents:
-            if agent['id'] == agent_id:
-                if nota:
-                    agent['notes'] = nota
-                agent['collect_resources'] = collect_resources
-                agent['collect_system'] = collect_system
-                agent['collect_auth'] = collect_auth
-                agent['collect_web'] = collect_web
-                flash('Configurações do agent atualizadas com sucesso!', 'success')
-                break
-        else:
-            flash('Agent não encontrado!', 'error')
-        
-        return redirect(url_for('view.manage'))
-    
-    return render_template('application/manage.html', 
-                         title='EventTrace | Manage Agent', 
-                         user=user,
-                         approved_agents=approved_agents,
-                         pending_agents=pending_agents)
 
 @view_bp.route('/notification', methods=['GET'])
 @login_required

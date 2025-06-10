@@ -14,10 +14,9 @@
          <input type="text" id="search-input" placeholder="Search by field" />
          <select id="agent-select">
             <option value="">All agents</option>
-            <option value="Agent1">Agent 1</option>
-            <option value="Agent2">Agent 2</option>
-            <option value="Agent3">Agent 3</option>
-            <option value="Agent4">Agent 4</option>
+            {% for event in events %}
+            <option value="{{ event.agent_id }}">{{ event.agent_id }}</option>
+            {% endfor %}
          </select>
          
          <select id="sort-select">
@@ -45,17 +44,18 @@
 </div>
 
 <div class="events-container">
-   <!-- Event 1 -->
+   {% for event in events %}
+   <!-- Event Loop -->
    <div class="event-line">
       <div class="resume-info">
          <button class="field-bttn"><i class="fa-solid fa-chevron-right"></i></button>
-         <div class="field-time">2023-05-15 14:30:22</div>
-         <div class="field-event">1495</div>
-         <div class="field-agent">00100</div>
-         <div class="field-host">Daniel</div>
-         <div class="field-ip">192.168.31.134</div>
-         <div class="field-desc">Authentication failure</div>
-         <div class="field-cat">SSH failed</div>
+         <div class="field-time">{{ event.timestamp }}</div>
+         <div class="field-event">{{ event.event_id }}</div>
+         <div class="field-agent">{{ event.agent_id }}</div>
+         <div class="field-host">{{ event.hostname }}</div>
+         <div class="field-ip">{{ event.ip }}</div>
+         <div class="field-desc">{{ event.description }}</div>
+         <div class="field-cat">{{ event.category }}</div>
       </div>
    </div>
    <div class="complete-line">
@@ -64,13 +64,13 @@
          <div class="complete-column">
             <div class="column-header">Full Status</div>
             <div class="scrollable-content">
-               <div class="complete-field"><span class="field-label">User:</span> daniel</div>
-               <div class="complete-field"><span class="field-label">File directory:</span> /home/daniel/Documents</div>
-               <div class="complete-field"><span class="field-label">Service:</span> SSH</div>
-               <div class="complete-field"><span class="field-label">Port:</span> 22</div>
-               <div class="complete-field"><span class="field-label">Directory:</span> N/A</div>
-               <div class="complete-field"><span class="field-label">Authentication:</span> Failed (3 attempts)</div>
-               <div class="complete-field"><span class="field-label">Web:</span> N/A</div>
+               <div class="complete-field"><span class="field-label">User:</span> {{ event.details.user }}</div>
+               <div class="complete-field"><span class="field-label">File directory:</span> {{ event.details.file_directory }}</div>
+               <div class="complete-field"><span class="field-label">Service:</span> {{ event.details.service }}</div>
+               <div class="complete-field"><span class="field-label">Port:</span> {{ event.details.port }}</div>
+               <div class="complete-field"><span class="field-label">Directory:</span> {{ event.details.directory }}</div>
+               <div class="complete-field"><span class="field-label">Authentication:</span> {{ event.details.authentication }}</div>
+               <div class="complete-field"><span class="field-label">Web:</span> {{ event.details.web }}</div>
             </div>
          </div>
          
@@ -78,94 +78,12 @@
          <div class="complete-column json-column">
             <div class="column-header">JSON</div>
             <div class="scrollable-content">
-               <pre>{
-     "event": {
-       "timestamp": "2023-05-15T14:30:22Z",
-       "id": 1495,
-       "type": "authentication",
-       "outcome": "failure"
-     },
-     "agent": {
-       "id": "00100",
-       "hostname": "Daniel",
-       "ip": "192.168.31.134"
-     },
-     "details": {
-       "user": "daniel",
-       "directory": "/home/daniel/Documents",
-       "service": "SSH",
-       "port": 22,
-       "authentication": {
-         "status": "failed",
-         "attempts": 3
-       }
-     }
-   }</pre>
+               <pre>{{ event.json_data | tojson(indent=4) }}</pre>
             </div>
          </div>
       </div>
    </div>
-
-   <!-- Event 2 -->
-   <div class="event-line">
-      <div class="resume-info">
-         <button class="field-bttn"><i class="fa-solid fa-chevron-right"></i></button>
-         <div class="field-time">2023-05-15 14:30:22</div>
-         <div class="field-event">1495</div>
-         <div class="field-agent">00100</div>
-         <div class="field-host">Daniel</div>
-         <div class="field-ip">192.168.31.134</div>
-         <div class="field-desc">Authentication failure</div>
-         <div class="field-cat">SSH failed</div>
-      </div>
-   </div>
-   <div class="complete-line">
-      <div class="complete-info">
-         <!-- Full Status Column -->
-         <div class="complete-column">
-            <div class="column-header">Full Status</div>
-            <div class="scrollable-content">
-               <div class="complete-field"><span class="field-label">User:</span> daniel</div>
-               <div class="complete-field"><span class="field-label">File directory:</span> /home/daniel/Documents</div>
-               <div class="complete-field"><span class="field-label">Service:</span> SSH</div>
-               <div class="complete-field"><span class="field-label">Port:</span> 22</div>
-               <div class="complete-field"><span class="field-label">Directory:</span> N/A</div>
-               <div class="complete-field"><span class="field-label">Authentication:</span> Failed (3 attempts)</div>
-               <div class="complete-field"><span class="field-label">Web:</span> N/A</div>
-            </div>
-         </div>
-         
-         <!-- JSON Column -->
-         <div class="complete-column json-column">
-            <div class="column-header">JSON</div>
-            <div class="scrollable-content">
-               <pre>{
-     "event": {
-       "timestamp": "2023-05-15T14:30:22Z",
-       "id": 1495,
-       "type": "authentication",
-       "outcome": "failure"
-     },
-     "agent": {
-       "id": "00100",
-       "hostname": "Daniel",
-       "ip": "192.168.31.134"
-     },
-     "details": {
-       "user": "daniel",
-       "directory": "/home/daniel/Documents",
-       "service": "SSH",
-       "port": 22,
-       "authentication": {
-         "status": "failed",
-         "attempts": 3
-       }
-     }
-   }</pre>
-            </div>
-         </div>
-      </div>
-   </div>
+   {% endfor %}
 </div>
 {% endblock %}
 

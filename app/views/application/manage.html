@@ -20,7 +20,7 @@
          <div class="field-id">
             <div>ID: {{ agent.id }}</div>
             <div>Nota: {{ agent.notes if agent.notes else '-' }}</div>
-            <div>Aprovado em: {{ agent.approval_timestamp.strftime('%d/%m/%Y') if agent.approval_timestamp else '-' }}</div>
+            <div>Aprovado em: {{ agent.aprovado_em.strftime('%d/%m/%Y') if agent.aprovado_em else '-' }}</div>
             <div>Status: {{ 'Up' if agent.status == 'up' else 'Down' }}</div>
          </div>
          <div class="field-logs">
@@ -30,15 +30,18 @@
             {% if agent.collect_web %}<div>◾ Web</div>{% endif %}
          </div>
          <div class="field-actions">
-            <button class="action-bttn block">Bloquear</button>
+            <form action="{{ url_for('main.bloquear') }}" method="POST" style="display: inline;">
+               <input type="hidden" name="agent_id" value="{{ agent.id }}">
+               <button type="submit" class="action-bttn block">Bloquear</button>
+            </form>
             <button class="action-bttn config">Configurar</button>
          </div>
       </div>
    </div>
    <div class="config-form" style="display: none;">
-      <form class="form-content" action="{{ url_for('view.manage') }}" method="POST">
+      <form class="form-content" action="{{ url_for('main.update_agent') }}" method="POST">
          <input type="hidden" name="agent_id" value="{{ agent.id }}">
-         <input type="text" name="nota" placeholder="Definir nota" class="form-input" value="{{ agent.notes if agent.notes }}">
+         <input type="text" name="notes" placeholder="Definir nota" class="form-input" value="{{ agent.notes if agent.notes }}">
          <div class="checkboxes">
             <label><input type="checkbox" name="collect_resources" {% if agent.collect_resources %}checked{% endif %}> Recursos</label>
             <label><input type="checkbox" name="collect_system" {% if agent.collect_system %}checked{% endif %}> Sistema</label>
@@ -69,7 +72,7 @@
          <div class="field-id">
             <div>ID: {{ agent.id }}</div>
             <div>Nota: {{ agent.notes if agent.notes else '-' }}</div>
-            <div>Registrado em: {{ agent.created_at.strftime('%d/%m/%Y') }}</div>
+            <div>Registrado em: {{ agent.criado_em.strftime('%d/%m/%Y') }}</div>
          </div>
          <div class="field-logs">
             {% if agent.collect_resources %}<div>◾ Recursos</div>{% endif %}
@@ -78,8 +81,14 @@
             {% if agent.collect_web %}<div>◾ Web</div>{% endif %}
          </div>
          <div class="field-actions">
-            <button class="action-bttn delete">Excluir</button>
-            <button class="action-bttn approve">Aprovar</button>
+            <form action="{{ url_for('main.rejeitar') }}" method="POST" style="display: inline;">
+               <input type="hidden" name="host_id" value="{{ agent.identificador_host }}">
+               <button type="submit" class="action-bttn delete">Excluir</button>
+            </form>
+            <form action="{{ url_for('main.autorizar') }}" method="POST" style="display: inline;">
+               <input type="hidden" name="host_id" value="{{ agent.identificador_host }}">
+               <button type="submit" class="action-bttn approve">Aprovar</button>
+            </form>
          </div>
       </div>
    </div>
@@ -120,19 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
       configForm.style.display = 'none';
       // Reset the config button text
       configForm.previousElementSibling.querySelector('.action-bttn.config').textContent = 'Configurar';
-    });
-  });
-
-  // Handle Block buttons
-  document.querySelectorAll('.action-bttn.block').forEach(blockBtn => {
-    blockBtn.addEventListener('click', function() {
-      const agentId = this.closest('.agent-line').querySelector('.field-id div:first-child').textContent.split(': ')[1];
-      if (confirm(`Tem certeza que deseja bloquear o agent ${agentId}?`)) {
-        // Here you would typically send block request to server
-        console.log('Blocking agent:', agentId);
-        this.closest('.agent-line').style.opacity = '0.5';
-        this.disabled = true;
-      }
     });
   });
 });
