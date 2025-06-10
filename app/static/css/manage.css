@@ -1,6 +1,5 @@
 .agent-container {
-   margin: 0px 20px 20px 30px;
-   min-height: 40vh;
+   margin: 0px 20px 5px 30px;
 }
 
 .agent-line{
@@ -178,7 +177,7 @@
 }
 
 .title-line {
-   margin: 10px 20px 5px 30px;
+   margin: 40px 20px 5px 30px;
    height: 7vh;
 }
 

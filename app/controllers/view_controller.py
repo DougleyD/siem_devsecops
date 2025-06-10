@@ -1,6 +1,5 @@
 from datetime import datetime
 from flask import Blueprint, flash, redirect, render_template, request, session, url_for, send_file, current_app
-from app.models.agent import Agent
 from app.models.triggers import Trigger
 from app.models.webhooks import Webhook
 from app.services.auth_service import admin_required, login_required
@@ -51,6 +50,51 @@ def manage(user):
         flash('Por favor, faça login para acessar esta página', 'error')
         return redirect(url_for('auth.login'))
     
+    # Dados mockados para exemplo (substitua por seus dados reais)
+    approved_agents = [
+        {
+            'id': '00100',
+            'notes': '8.5',
+            'approval_timestamp': datetime(2023, 5, 15),
+            'status': 'down',
+            'collect_resources': True,
+            'collect_system': True,
+            'collect_auth': True,
+            'collect_web': True
+        },
+        {
+            'id': '00101',
+            'notes': '7.2',
+            'approval_timestamp': datetime(2023, 6, 1),
+            'status': 'up',
+            'collect_resources': True,
+            'collect_system': False,
+            'collect_auth': True,
+            'collect_web': False
+        }
+    ]
+    
+    pending_agents = [
+        {
+            'id': '00200',
+            'notes': None,
+            'created_at': datetime(2023, 5, 28),
+            'collect_resources': True,
+            'collect_system': True,
+            'collect_auth': False,
+            'collect_web': True
+        },
+        {
+            'id': '00201',
+            'notes': None,
+            'created_at': datetime(2023, 6, 10),
+            'collect_resources': False,
+            'collect_system': True,
+            'collect_auth': True,
+            'collect_web': False
+        }
+    ]
+    
     if request.method == 'POST':
         # Processar o formulário de configuração
         agent_id = request.form.get('agent_id')
@@ -60,24 +104,21 @@ def manage(user):
         collect_auth = 'collect_auth' in request.form
         collect_web = 'collect_web' in request.form
         
-        agent = Agent.query.get(agent_id)
-        if agent:
-            if nota:
-                agent.notes = nota
-            agent.collect_resources = collect_resources
-            agent.collect_system = collect_system
-            agent.collect_auth = collect_auth
-            agent.collect_web = collect_web
-            db.session.commit()
-            flash('Configurações do agent atualizadas com sucesso!', 'success')
+        # Atualizar os dados mockados (simulando banco de dados)
+        for agent in approved_agents + pending_agents:
+            if agent['id'] == agent_id:
+                if nota:
+                    agent['notes'] = nota
+                agent['collect_resources'] = collect_resources
+                agent['collect_system'] = collect_system
+                agent['collect_auth'] = collect_auth
+                agent['collect_web'] = collect_web
+                flash('Configurações do agent atualizadas com sucesso!', 'success')
+                break
         else:
             flash('Agent não encontrado!', 'error')
         
         return redirect(url_for('view.manage'))
-    
-    # Buscar agents aprovados e pendentes
-    approved_agents = Agent.query.filter_by(is_approved=True).all()
-    pending_agents = Agent.query.filter_by(is_approved=False).all()
     
     return render_template('application/manage.html', 
                          title='EventTrace | Manage Agent', 
