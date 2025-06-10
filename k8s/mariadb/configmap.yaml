@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-init-sql
+  namespace: default
+data:
+  siem_dev.sql: |
+    -- MariaDB dump 10.19-11.7.2-MariaDB
+
+    DROP TABLE IF EXISTS `agentes`;
+    CREATE TABLE `agentes` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `identificador_host` varchar(64) NOT NULL COMMENT 'Hash único do host gerado pelo agente',
+      `ip_agente` varchar(45) DEFAULT NULL COMMENT 'IP de onde o agente está enviando os dados',
+      `chave_fernet` text NOT NULL COMMENT 'Chave Fernet descriptografada recebida do agente',
+      `aprovado` tinyint(1) DEFAULT 0 COMMENT 'Indica se o agente foi aprovado para envio de logs',
+      `chave_publica` text DEFAULT NULL COMMENT 'Chave pública RSA enviada pelo agente',
+      `criado_em` datetime DEFAULT current_timestamp() COMMENT 'Data de criação do registro',
+      `aprovado_em` datetime DEFAULT NULL COMMENT 'Data em que o agente foi aprovado',
+      `ultimo_contato` datetime DEFAULT NULL COMMENT 'Última vez que o agente enviou dados',
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `identificador_host` (`identificador_host`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    DROP TABLE IF EXISTS `alembic_version`;
+    CREATE TABLE `alembic_version` (
+      `version_num` varchar(32) NOT NULL,
+      PRIMARY KEY (`version_num`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    DROP TABLE IF EXISTS `user`;
+    CREATE TABLE `user` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `username` varchar(80) NOT NULL,
+      `email` varchar(120) NOT NULL,
+      `password_hash` varchar(255) NOT NULL,
+      `tfa_secret` varchar(255) DEFAULT NULL,
+      `tfa_enabled` tinyint(1) DEFAULT NULL,
+      `tfa_expiration` datetime DEFAULT NULL,
+      `is_admin` tinyint(1) DEFAULT NULL,
+      `session_token` varchar(100) DEFAULT NULL,
+      `session_expiration` datetime DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `email` (`email`),
+      UNIQUE KEY `session_token` (`session_token`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
