@@ -1,0 +1,5 @@
+flask
+pika
+pymongo
+requests
+mysql-connector-python

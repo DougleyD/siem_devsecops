@@ -1,0 +1,141 @@
+{% extends "application/base.html" %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/events.css') }}">
+{% endblock %}
+
+{% block section %}
+<div class="filter-line">
+   <div class="filter-content">
+      <form id="filter-form">
+         <div class="icon-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+         </div>
+         <input type="text" id="search-input" placeholder="Search by field" />
+         <select id="agent-select">
+            <option value="">All agents</option>
+            {% for event in events %}
+            <option value="{{ event.agent_id }}">{{ event.agent_id }}</option>
+            {% endfor %}
+         </select>
+         
+         <select id="sort-select">
+            <option value="time_asc">Newest first</option>
+            <option value="time_desc">Oldest first</option>
+            <option value="agent_asc">Agent ID (A-Z)</option>
+            <option value="agent_desc">Agent ID (Z-A)</option>
+            <option value="severity">Severity (High first)</option>
+         </select>
+      </form>
+   </div>
+</div>
+
+<div class="title-line">
+   <div class="title-info">
+      <button class="title-bttn"><i class="fa-solid fa-chart-simple"></i></button>
+      <div class="field-time">Timestamp</div>
+      <div class="field-event">Event ID</div>
+      <div class="field-agent">Agent ID</div>
+      <div class="field-host">Hostname</div>
+      <div class="field-ip">IP</div>
+      <div class="field-desc">Message</div>
+      <div class="field-cat">Category</div>
+   </div>
+</div>
+
+<div class="events-container">
+   {% for event in events %}
+   <!-- Event Loop -->
+   <div class="event-line">
+      <div class="resume-info">
+         <button class="field-bttn"><i class="fa-solid fa-chevron-right"></i></button>
+         <div class="field-time">{{ event.timestamp }}</div>
+         <div class="field-event">{{ event.event_id }}</div>
+         <div class="field-agent">{{ event.agent_id }}</div>
+         <div class="field-host">{{ event.hostname }}</div>
+         <div class="field-ip">{{ event.ip }}</div>
+         <div class="field-desc">{{ event.description }}</div>
+         <div class="field-cat">{{ event.category }}</div>
+      </div>
+   </div>
+   <div class="complete-line">
+      <div class="complete-info">
+         <!-- Full Status Column -->
+         <div class="complete-column">
+            <div class="column-header">Full Status</div>
+            <div class="scrollable-content">
+               <div class="complete-field"><span class="field-label">User:</span> {{ event.details.user }}</div>
+               <div class="complete-field"><span class="field-label">File directory:</span> {{ event.details.file_directory }}</div>
+               <div class="complete-field"><span class="field-label">Service:</span> {{ event.details.service }}</div>
+               <div class="complete-field"><span class="field-label">Port:</span> {{ event.details.port }}</div>
+               <div class="complete-field"><span class="field-label">Directory:</span> {{ event.details.directory }}</div>
+               <div class="complete-field"><span class="field-label">Authentication:</span> {{ event.details.authentication }}</div>
+               <div class="complete-field"><span class="field-label">Web:</span> {{ event.details.web }}</div>
+            </div>
+         </div>
+         
+         <!-- JSON Column -->
+         <div class="complete-column json-column">
+            <div class="column-header">JSON</div>
+            <div class="scrollable-content">
+               <pre>{{ event.json_data | tojson(indent=4) }}</pre>
+            </div>
+         </div>
+      </div>
+   </div>
+   {% endfor %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle complete information
+  document.querySelectorAll('.field-bttn').forEach(button => {
+    button.addEventListener('click', function() {
+      const eventLine = this.closest('.event-line');
+      const completeLine = eventLine.nextElementSibling;
+      
+      if (completeLine && completeLine.classList.contains('complete-line')) {
+        completeLine.style.display = completeLine.style.display === 'flex' ? 'none' : 'flex';
+        
+        const icon = this.querySelector('i');
+        if (icon.classList.contains('fa-chevron-right')) {
+          icon.classList.replace('fa-chevron-right', 'fa-chevron-down');
+        } else {
+          icon.classList.replace('fa-chevron-down', 'fa-chevron-right');
+        }
+      }
+    });
+  });
+
+  // Filter and sort functionality
+  const applyFiltersBtn = document.getElementById('apply-filters');
+  
+  applyFiltersBtn.addEventListener('click', function() {
+    const query = document.getElementById('query-input').value.toLowerCase();
+    const dateFrom = document.getElementById('date-from').value;
+    const dateTo = document.getElementById('date-to').value;
+    const sortMethod = document.getElementById('sort-select').value;
+    
+    // This would be replaced with actual filtering logic
+    console.log('Applying filters:', { query, dateFrom, dateTo, sortMethod });
+    
+    // Here you would typically:
+    // 1. Parse the query string (key:value pairs with logical operators)
+    // 2. Apply date range filtering
+    // 3. Sort the results
+    // 4. Update the UI
+    
+    alert('Filter functionality would be implemented here');
+  });
+  
+  // Initialize date inputs with reasonable defaults
+  const now = new Date();
+  const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  
+  document.getElementById('date-from').valueAsDate = oneWeekAgo;
+  document.getElementById('date-to').valueAsDate = now;
+});
+</script>
+{% endblock %}
