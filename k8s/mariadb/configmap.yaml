@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mariadb-init-sql
-  namespace: default
+  namespace: siem
 data:
   siem_dev.sql: |
     -- MariaDB dump 10.19-11.7.2-MariaDB

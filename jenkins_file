@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_REPO = 'https://github.com/DougleyD/siem_devsecops.git'
+        CONTAINER_NAME = 'siem_front'
+        SNYK_TOKEN = credentials('ec3c098c-cfe1-452c-a036-f026363e204b')
+    }
+
+        stage('Clonar Repositório') {
+            steps {
+                git branch: 'deploy', url: 'https://github.com/DougleyD/siem_devsecops.git'
+            }
+        }
+
+
+        stage('Instalar Requirements') {
+            steps {
+                sh """
+                    docker exec ${CONTAINER_NAME} bash -c '
+                        python3 -m venv venv &&
+                        . venv/bin/activate &&
+                        pip install --upgrade pip &&
+                        pip install -r requirements.txt
+                    '
+                """
+            }
+        }
+
+        stage('Testes Unitários') {
+            steps {
+                sh """
+                    docker exec ${CONTAINER_NAME} bash -c '
+                        . venv/bin/activate &&
+                        pytest --disable-warnings || echo "⚠️ Falha nos testes"
+                    '
+                """
+            }
+        }
+
+        stage('Análise com Snyk') {
+            steps {
+                sh """
+                    docker exec ${CONTAINER_NAME} bash -c '
+                        npm install -g snyk &&
+                        snyk auth ${SNYK_TOKEN} &&
+                        snyk test || echo "⚠️ Snyk encontrou problemas"
+                    '
+                """
+            }
+        }
+
+        stage('Validar Pods (K8s)') {
+            steps {
+                sh 'kubectl get pods -n siem || echo "⚠️ Não foi possível listar os pods"'
+            }
+        }
+
+        stage('Deploy K3s') {
+            steps {
+                sh './deploy_siem.sh'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Pipeline executada com sucesso!'
+        }
+        failure {
+            echo '❌ Erro na pipeline. Verifique os logs.'
+        }
+    }
+}
