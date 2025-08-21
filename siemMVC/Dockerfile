@@ -1,4 +1,4 @@
-FROM python:3.13.4-bookworm
+FROM python:3.14.0rc2-bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive
 
