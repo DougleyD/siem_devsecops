@@ -1,4 +1,4 @@
-cryptography==42.0.5
+cryptography==46.0.5
 requests
 pymongo
 alembic==1.15.2
